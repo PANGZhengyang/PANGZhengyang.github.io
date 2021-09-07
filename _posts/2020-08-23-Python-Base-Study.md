@@ -38,77 +38,18 @@ df
 #method 2: 使用set_index(['name','examl']);当然格式和上面的方法不一样，只是set_index可以构建多层索引
 ```
 
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th></th>
-      <th>Jave</th>
-      <th>Web</th>
-      <th>Python</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th rowspan="2" valign="top">张三</th>
-      <th>期中</th>
-      <td>20</td>
-      <td>77</td>
-      <td>23</td>
-    </tr>
-    <tr>
-      <th>期末</th>
-      <td>18</td>
-      <td>33</td>
-      <td>29</td>
-    </tr>
-    <tr>
-      <th rowspan="2" valign="top">李四</th>
-      <th>期中</th>
-      <td>43</td>
-      <td>68</td>
-      <td>59</td>
-    </tr>
-    <tr>
-      <th>期末</th>
-      <td>54</td>
-      <td>47</td>
-      <td>43</td>
-    </tr>
-    <tr>
-      <th rowspan="2" valign="top">王五</th>
-      <th>期中</th>
-      <td>17</td>
-      <td>62</td>
-      <td>79</td>
-    </tr>
-    <tr>
-      <th>期末</th>
-      <td>80</td>
-      <td>47</td>
-      <td>11</td>
-    </tr>
-  </tbody>
-</table>
-
 ## 2.2多层索引的取值
 
 ```python
 #使用 .loc[]
 df.loc['张三','期末']
 ```
-
+```
     Jave      18
     Web       33
     Python    29
     Name: (张三, 期末), dtype: int32
-
+```
 
 
 ## 2.3多层索引的排序
@@ -206,7 +147,7 @@ print(df.sort_index())
 print('-----------------------')
 print(df.sort_index(level=1))
 ```
-
+```
          Java  Web  Python
     a 1    37    1      41
       2    62   92      10
@@ -228,7 +169,7 @@ print(df.sort_index(level=1))
     a 3     2   18      94
     b 3    18   79      21
     c 3    12   78      41
-
+```
 
 ## 2.4set_index() 与 reset_index()
 1.set_index('country',drop = True) 将‘country’这一列作为index ,drop = True 删除用作新索引的列（也就是把之前的‘country'列删了）! **宽表变为长表**
@@ -421,6 +362,7 @@ print(data2)
 print('-----------------------------------------\n')
 print(data3)
 ```
+```
 
              store1  store2  store3  store4
     street1       0       1       2       3
@@ -447,7 +389,7 @@ print(data3)
     street1       0       1       2       3
     street2       4       5       6       7
     street3       8       9      10      11
-
+```
 
 
 ```python
@@ -455,13 +397,14 @@ print(data3)
 data4=data2.unstack(level=0) #这个例子中level = 0 就是最外层的行索引[street1-4]
 print(data4)
 ```
+```
 
             street1  street2  street3
     store1        0        4        8
     store2        1        5        9
     store3        2        6       10
     store4        3        7       11
-
+```
 
 ## 2.6pivot()和pivot_table() 
 
