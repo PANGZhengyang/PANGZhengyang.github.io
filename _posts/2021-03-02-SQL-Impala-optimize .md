@@ -100,7 +100,7 @@ and a.dt = b.dt
 and a.dt = '2021-08-10';
 ```
 
-![2021-03-02-SQL-impala-optimize](D:\庞正扬\Github\PANGZhengyang.github.io\_posts\2021-03-02-SQL-Impala-optimize .assets\2021-03-02-SQL-impala-optimize.png)
+![2021-03-02-SQL-impala-optimize](/assets/2021-03-02-SQL-impala-optimize.png)
 
 ### 2.2.4 创建分区表
 
@@ -158,7 +158,7 @@ where dt = to_date(now())
 
 用partitioned join：在`join`或`left join` 后面加上`[shuffle]`即可
 
-![2021-03-02-SQL-impala-optimize2](D:\庞正扬\Github\PANGZhengyang.github.io\_posts\2021-03-02-SQL-Impala-optimize .assets\2021-03-02-SQL-impala-optimize2.png)
+![2021-03-02-SQL-impala-optimize2](/assets/2021-03-02-SQL-impala-optimize2.png)
 
 ```sql
 SELECT 
@@ -173,7 +173,7 @@ join_right_hand_table
 
 用`broadcast join`
 
-![2021-03-02-SQL-impala-optimize3](D:\庞正扬\Github\PANGZhengyang.github.io\_posts\2021-03-02-SQL-Impala-optimize .assets\2021-03-02-SQL-impala-optimize3.png)
+![2021-03-02-SQL-impala-optimize3](/assets/2021-03-02-SQL-impala-optimize3.png)
 
 ## 2.4 parquet
 
