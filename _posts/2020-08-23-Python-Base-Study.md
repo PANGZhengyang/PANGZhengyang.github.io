@@ -549,6 +549,77 @@ df.pivot(index = 'street',columns=['store'],values='num')
   </tbody>
 </table>
 
+## 2.7 Crosstab
+```python
+#默认情况下，crosstab计算因子的频率表，比如用于str的数据透视分析
+pd.crosstab(index,columns,values,aggfunc)
+
+# 如果crosstab只接收两个Series，它将提供一个频率表。
+pd.crosstab(df['A'],df['B']) #要写成index
+```
+
+
+# 3.缺失值
+
+在做数据预处理是，会关注missing value：
+
+1）查看缺失值：
+
+```python
+df.isnull()
+#看每一列有数据的数量
+df.info()
+# 哪一列具有缺失值
+df.isnull().any()
+```
+
+2）定位哪些行具有缺失值：
+
+```py
+df.loc[df.isnull().values]
+```
+
+3）删除：
+
+```python
+df.dropna()
+```
+
+4）填充：
+
+```python
+#用xxx列的均值填充
+df['xxx'].fillna(df['xxx'].mean())
+
+#用插值法填充
+df['xxx'] = df['xxx'].interpolate()
+
+```
+
+# 4.重复值
+
+在数据预处理的过程中，重复值也有可能使我们要关注的：
+
+```python
+df.duplicated() 
+
+df.drop_duplicates(inplace=True)
+```
+
+# 5.Pandas 数据输出显示设置
+
+```py
+pd.set_option('参数名',参数值)
+
+#参数名：
+1.display.max_rows:最大显示行数，超过该值用省略号代替，为None时显示所有行。
+2.display.max_columns:最大显示列数
+3.display.precision: 数据小数点
+
+pd.set_option('float_format', lambda x: '%.3f' % x) #取消科学计数法
+```
+
+
 
 
 
