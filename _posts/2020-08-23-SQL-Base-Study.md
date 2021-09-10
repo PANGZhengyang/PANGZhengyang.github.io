@@ -126,6 +126,7 @@ select ... from ...;
 
 
 
+
   # 4.函数 Functions
 
 ## 4.1 Built-in functions
@@ -203,7 +204,7 @@ to_date(concat(substr(now(),1,7),'-01'))
 
 `datediff(timestamp enddate, timestamp startdate)`(mysql也可以用)(Cloudera 2018a)
 
- #### 4.1.2.8 where 条件中时间比较时，string格式默认转为时间格式
+#### 4.1.2.8 where 条件中时间比较时，string格式默认转为时间格式
 
 ```sql
 with tbl_2 as

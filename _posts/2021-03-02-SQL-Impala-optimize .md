@@ -12,7 +12,7 @@ Impala基于Hive，提供对HDFS、HBase数据的高性能、低延迟的交互�
 
 # 2、Impala性能优化常用思路
 
-## ## 2.1 explain查看impala执行计划
+##  2.1 explain查看impala执行计划
 
 > You can see the results by looking at the **EXPLAIN** plan for a query, without the need to actually run it. （Russell (2014)） 
 
@@ -22,7 +22,8 @@ Impala基于Hive，提供对HDFS、HBase数据的高性能、低延迟的交互�
 
 从bottom开始往上看
 
-```[localhost:21000] > explain select count(*) from partitioned_normalized_parquet
+```
+[localhost:21000] > explain select count(*) from partitioned_normalized_parquet
 > join stats_demo_parquet using (id)
 > where
 > substr(partitioned_normalized_parquet.name,1,1) = 'G';
@@ -59,7 +60,7 @@ Returned 21 row(s) in 0.03s
 
 ## 2.2 分区裁剪 
 
- ### 2.2.1 Impala每一个分区都有一个文件夹，查看有无分区：
+### 2.2.1 Impala每一个分区都有一个文件夹，查看有无分区：
 
 ```sql
 show partitions edw.d_cs_cdr_dly;
@@ -152,7 +153,7 @@ where dt = to_date(now())
 2. 一个SQL会被拆解为多个任务执行 并由多个worker参与计算 计算是分布式的，worker可能分布在 不同机器上 
 3. worker通过读取文件来获取表数据
 
-![2021-03-02-SQL-impala-optimize1](D:\庞正扬\Github\PANGZhengyang.github.io\_posts\2021-03-02-SQL-Impala-optimize .assets\2021-03-02-SQL-impala-optimize1.png)
+![2021-03-02-SQL-impala-optimize1](/assets/2021-03-02-SQL-impala-optimize1.png)
 
 ### 2.3.1 大表join大表
 
