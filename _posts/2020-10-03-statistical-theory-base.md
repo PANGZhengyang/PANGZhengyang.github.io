@@ -89,13 +89,13 @@ $$
 IQR = Q_3-Q_1
 $$
 
- ### 箱型图
+### 箱型图
 
 ![](/assets/2020-10-03-statistical-theory-base1.png)
 
 虚线末尾表示原始数据最大值和最小值
 
-箱型图排查异常值的原理就是：划出上限：`$Q_3$+1.5IQR` 和下限`$Q_1$-1.5IQR`
+箱型图排查异常值的原理就是：划出上限：$Q_3$+1.5IQR 和下限$Q_1$-1.5IQR
 
 ## 统计
 
@@ -262,22 +262,12 @@ $$
 
 $x_i$ 是来自总体的样本，$\overline X$ 是该样本的均值
 $$
-E(S^2) = E[\frac{1}{n-1}\sum_{i=1}^{n}(x_i-\overline X)^2]=\frac{1}{n-1}E[(\sum_{i=1}^{n}x_i^2-2\sum_{i=1}^{n}x_i\overline X+n\overline X^2)] 
-
-\\
+E(S^2) = E[\frac{1}{n-1}\sum_{i=1}^{n}(x_i-\overline X)^2]=\frac{1}{n-1}E[(\sum_{i=1}^{n}x_i^2-2\sum_{i=1}^{n}x_i\overline X+n\overline X^2)] \\
 =\frac{1}{n-1}E[(\sum_{i=1}^{n}x_i^2-2n\frac{1}{n}\sum_{i=1}^{n}x_i\overline X+n\overline X^2)]=
-\frac{1}{n-1}E[(\sum_{i=1}^{n}x_i^2-2n\overline X^2+n\overline X^2)] 
-
-\\
-=\frac{1}{n-1}E[\sum_{i=1}^{n}x_i^2-n\overline X^2] = \frac{1}{n-1}[nE(X^2)-nE(\overline X^2)] 
-
-\\ 
-\because D(X) = E(X^2) - E^2(X) \Rightarrow E(X^2) = D(X)+ E^2(X) = \sigma^2 + \mu^2 
-
-\\
-\because D(\overline X) = E(\overline X^2) - E^2(\overline X) \Rightarrow E(\overline X^2) = D(\overline X) +E^2(\overline X) = \frac{\sigma^2}{n} +\mu^2 
-
-\\
+\frac{1}{n-1}E[(\sum_{i=1}^{n}x_i^2-2n\overline X^2+n\overline X^2)] \\
+=\frac{1}{n-1}E[\sum_{i=1}^{n}x_i^2-n\overline X^2] = \frac{1}{n-1}[nE(X^2)-nE(\overline X^2)] \\ 
+\because D(X) = E(X^2) - E^2(X) \Rightarrow E(X^2) = D(X)+ E^2(X) = \sigma^2 + \mu^2 \\
+\because D(\overline X) = E(\overline X^2) - E^2(\overline X) \Rightarrow E(\overline X^2) = D(\overline X) +E^2(\overline X) = \frac{\sigma^2}{n} +\mu^2 \\
 代入上式:E(S^2) =   \frac{1}{n-1}[n\sigma^2+n\mu^2-\sigma^2-n\mu^2] = \sigma^2
 $$
 几个概念的补充：
@@ -328,8 +318,8 @@ $$
 总体比例的区间估计：
 
 因为$\overline p$抽样分布服从正态分布，且用$z_\frac{a}{2} \sigma$作为边际误差，但$p$未知不能直接使用$\sigma$，所以用$\overline p$代替$p$
+
 $$
 \overline p \pm z_\frac{a}{2} \sqrt{\frac{\overline p(1-\overline p)}{n}}
 $$
-
 
