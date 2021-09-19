@@ -24,7 +24,7 @@ Impala基于Hive，提供对HDFS、HBase数据的高性能、低延迟的交互�
 
 ```
 [localhost:21000] > explain select count(*) from partitioned_normalized_parquet
-> join stats_demo_parquet using (id)
+> join stats_demo_parquet using (id) --使用using会去掉重复列
 > where
 > substr(partitioned_normalized_parquet.name,1,1) = 'G';
 +-------------------------------------------------------------------------+
@@ -124,7 +124,7 @@ from test.x1
 
 ### 2.2.5 修改分区表
 
-通常使用``insert overwrite`
+通常使用`insert overwrite`
 
 ```sql
 insert overwrite table test.xxx partition(dt)
@@ -178,5 +178,13 @@ join_right_hand_table
 
 ## 2.4 parquet
 
+建表使用parquet的文件格式：
+
+1. 比textfile存储空间更小
+
+2. 列式存储，如果只取用得着的列，效能能提高
+
 ## 2.5 compute stats
+
+收集有关表中数据的容量和分布以及所有相关列和分区的信息，优化impala查询。
 

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "SQL Base Study-Impala/Hive"
-date: 2021-08-23
+date: 2020-08-23
 description: "SQL"
 tag: SQL
 ---
@@ -34,7 +34,7 @@ select ... from ...;
 
 - `insert into table` :update
 
-  由于涉及分区，所以更新data一般会先取之前的数据再加上今天的数据：
+  更新data一般会先取之前的数据再加上今天的数据：
 
   ```sql
   insert overwrite test.xxx
@@ -43,6 +43,13 @@ select ... from ...;
   where dt < to_date(now())
   union all
   select x1,x2
+  from a
+  where dt = to_date(now())
+  ```
+  如果这张表是分区表,那么更新data：
+  ```sql
+  insert overwrite test.xxx partition (dt)
+  select *
   from a
   where dt = to_date(now())
   ```
@@ -68,7 +75,7 @@ select ... from ...;
   left semi join B on A.key = B.key
   ```
 
-  ` left anti join` 是 `not in /exists` 子查询的一种高效地实现
+  ` left anti join`  是  `not in /exists` 子查询的一种高效地实现
 
   ```sql
   select A.key,A.value
@@ -127,7 +134,16 @@ select ... from ...;
 
 
 
-  # 4.函数 Functions
+
+
+
+
+
+
+
+
+
+# 4.函数 Functions
 
 ## 4.1 Built-in functions
 
@@ -286,6 +302,91 @@ select replace('s d f',' ','');
 
 `substr(str,start,end)`
 
+#### 4.1.4.5 explode in hive
+
+`explode`的作用是处理map，array字段类型
+
+```sql
+CREATE TABLE test.T0915B
+(
+wc_id string,
+uid string
+);
+
+INSERT INTO test.T0915B VALUES
+('90002','001,002,004'),
+('90003','005');
+
+select explode(split(uid,',')) as uid
+from test.T0915B;
+```
+
+但是`explode`只能查一个字段，且UDTF `explode`不能写在别的函数内；如果要查多个字段要用侧视图
+
+#### 4.1.4.6 LATERAL VIEW Explode
+
+侧视图的意义是配合`explode`（或者其他的UDTF），一个语句生成把单行数据拆解成多行后的数据结果集。
+
+```sql
+select wc_id,
+uid1
+from test.T0915B
+LATERAL VIEW explode(split(uid,',')) uid1 as uid1;
+```
+
+```
+wc_id	uid1
+90002	001
+90002	002
+90002	004
+90003	005
+
+```
+
+#### 4.1.4.7 map
+
+```sql
+create table test.T0919
+(
+    id int,
+    yes int,
+    noo int
+);
+
+insert into test.T0919 values
+(1,21,89),
+(2,11,65);
+
+select id,map('yes',yes,'noo',noo) as tep_column
+from test.T0919
+```
+
+```
+id   tep_column
+1     {'yes':21,'noo':89}
+2     {'yes':11,'noo':65}
+```
+使用侧视图以及`explode`函数将`map`拆开
+```sql
+with t as (
+select id,map('yes',yes,'noo',noo)as tep_column
+from test.T0919)
+
+select id,
+        bool,
+        value
+from t
+lateral view explode(tep_column) a as bool,value;
+```
+
+```
+id   bool  value
+1      yes   21
+1       no   89
+2       yes  11
+2       yes  65
+```
+
 ## 4.2 汇总函数 Aggregate Functions
 
 `max,min,count,avg` 这个地方注意一下·`null`
@@ -344,4 +445,35 @@ Analytic functions are usually used with `OVER`, `PARTITION BY`, `ORDER BY`, and
 - current row：顾名思义，当前行，偏移量为0
 
 > If we omit BETWEEN…AND (such as `ROWS N PRECEDING` or `ROWS UNBOUNDED PRECEDING`), Hive considers it as the start point, and the end point defaults to **the current row**. (D. Du 2015)
+
+# 5.使用python去连接Impala
+
+```sql
+from impala.dbapi import connect
+from impala.util import as_pandas
+
+    conn = connect(host='******', auth_mechanism='PLAIN', port=10000, user='lijiaxiang',                                password='******')
+    cursor = conn.cursor()
+    cnt = 1
+
+    # 2.2 对impala执行SQL查询
+    if ';' in sql:
+        sql_list = sql.rstrip().split(';')
+        # print(type(sql_list))
+        if len(sql_list[-1]):
+            for s in sql_list:
+                print("runing sql @ %s" % cnt)
+                cursor.execute(s)
+                cnt += 1
+        else:
+            sql_list.pop()
+            for s in sql_list:
+                print("runing sql @ %s" % cnt)
+                cursor.execute(s)
+                cnt += 1
+    else:
+        print("runing sql @ %s" % cnt)
+        cursor.execute(sql)
+    return as_pandas(cursor) if cursor.description != None else 'null'
+```
 
