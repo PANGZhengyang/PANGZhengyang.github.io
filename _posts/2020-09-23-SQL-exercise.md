@@ -183,6 +183,33 @@ id   bool  value
 2       yes  65
 ```
 
+有些时候想实现行转列的的需要，如下test表
+
+```
+col1   col2   col3
+a       b       1
+a       b       2
+a       b       3
+c       d       4
+c       d       5
+c       d       6
+```
+
+变为
+
+```
+a       b       1,2,3
+c       d       4,5,6
+```
+
+这个时候可以使用`concat_ws`和`collect_set`：
+
+```sql
+select col1,col2, concat_ws(',',collect_set(col3))
+from test
+group by col1,col2;
+```
+
 
 
 ## 6.3 case when 巧用:减少代码量
@@ -241,6 +268,45 @@ select avg(id) as median
 from t
 where rnd in (floor((cnt+1)/2),ceiling((cnt+1)/2))
 ```
+
+有一种特殊情况：
+
+| NUM  | QTY  |
+| :--: | :--: |
+|  1   |  2   |
+|  5   |  3   |
+
+变为：
+
+| NUM  |
+| :--: |
+|  1   |
+|  1   |
+|  5   |
+|  5   |
+|  5   |
+
+提供一个思路：使用`repeat`和`explode`
+
+```sql
+create table test.T0810 (num int, QTY int);
+insert into test.T0810 values(1,2);
+insert into test.T0810 values(5,3);
+
+with t as (
+select repeat(concat(cast(num as string),','),qty) as num
+from test.T0810),
+
+t1 as (
+select explode(split(num,',')) as num
+from t)
+
+select *
+from t1
+where num !='';
+```
+
+
 
 # 九、计算留存率
 
@@ -354,7 +420,7 @@ group by id;
 
 对于连续性的题目，有几个常见的思路：自连接、窗口函数的运用：lag/lead 、 row_number
 
-查询出最大连续失败场次数大于3的记录。
+例1：查询出最大连续失败场次数大于3的记录。
 
 ```sql
 CREATE TABLE test.T0823 (
@@ -389,5 +455,48 @@ where num2 in (
     group by num2
     having count(num2) >3
     )
+```
+
+例2：取到每段连续日期的起始日期，终止日期，持续天数以及起始日期距上一期终止日期间隔的天数。
+
+```sql
+CREATE TABLE test.T0818
+(
+ID INT,
+RQ string
+);
+
+INSERT into test.T0818 VALUES(1,'2020-01-01');
+INSERT into test.T0818 VALUES(2,'2020-01-02');
+INSERT into test.T0818 VALUES(3,'2020-01-03');
+INSERT into test.T0818 VALUES(4,'2020-01-06');
+INSERT into test.T0818 VALUES(5,'2020-01-07');
+INSERT into test.T0818 VALUES(6,'2020-01-10');
+INSERT into test.T0818 VALUES(7,'2020-01-11');
+INSERT into test.T0818 VALUES(8,'2020-01-12');
+INSERT into test.T0818 VALUES(9,'2020-01-19');
+INSERT into test.T0818 VALUES(10,'2020-01-20');
+INSERT into test.T0818 VALUES(11,'2020-01-22');
+INSERT into test.T0818 VALUES(12,'2020-01-23');
+INSERT into test.T0818 VALUES(13,'2020-01-28');
+
+with t0 as (
+select min(rq) begin_rq,
+       max(rq) end_rq,
+       datediff(max(rq),min(rq))+1 as duration_day,
+       row_number() over (order by min(rq)) rn
+from test.T0818
+group by  to_date(date_sub(rq,id))),
+
+     t1 as (
+select a.begin_rq,
+         a.end_rq,
+         a.duration_day,
+         lead(a.begin_rq,1) over(order by a.begin_rq) next_rq
+from t0 a )
+
+select begin_rq,end_rq,duration_day,datediff(next_rq,end_rq) as gap
+from t1;
+
 ```
 

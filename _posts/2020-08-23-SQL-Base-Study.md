@@ -143,6 +143,7 @@ select ... from ...;
 
 
 
+
 # 4.函数 Functions
 
 ## 4.1 Built-in functions
@@ -386,6 +387,47 @@ id   bool  value
 2       yes  11
 2       yes  65
 ```
+
+#### 4.1.4.8 concat_ws()
+
+链接多个字符串，`concat_ws(seq,string A,string B...)`
+
+#### 4.1.4.9 collect_set() 和collect_list()
+
+一般和`group by`连用，形成一个list，collect_set 是去重的，collect_list是不去重的。
+
+```sql
+create table if not exists test.T0924
+(
+    c1 string,
+    c2 string,
+    c3 string
+);
+INSERT into test.T0924
+SELECT 'a','b','1'
+UNION ALL
+SELECT 'a','b','2'
+UNION ALL
+SELECT 'a','b','3'
+UNION ALL
+SELECT 'c','d','4'
+UNION ALL
+SELECT 'c','d','5'
+UNION ALL
+SELECT 'c','d','6';
+
+select c1,c2,collect_set(c3) as lst
+from test.T0924
+group by c1,c2;
+```
+
+```
+c1 c2 lst
+a  b  ["1","2","3"]
+c  d  ["4","5",]
+```
+
+
 
 ## 4.2 汇总函数 Aggregate Functions
 
