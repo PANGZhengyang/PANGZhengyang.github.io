@@ -19,7 +19,7 @@ tag: Python
 └─code.sql
 ```
 
-其中`code.sql`是我们的取数SQL模板，模板参数使用jinja2进行渲染；`db.py`文件，是[另外一篇文章中写的数据库连接类](https://blanket58.github.io/2020/12/impyla/)；`utils`文件夹下的另一个文件`tools.py`内容如下：
+其中`code.sql`是我们的取数SQL模板，模板参数使用jinja2进行渲染；`db.py`文件，是[另外一篇文章中写的数据库连接类](https://pangzhengyang.github.io/2020/12/impyla/)；`utils`文件夹下的另一个文件`tools.py`内容如下：
 
 ```python
 import base64

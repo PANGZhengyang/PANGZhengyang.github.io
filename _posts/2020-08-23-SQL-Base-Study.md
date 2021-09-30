@@ -144,6 +144,7 @@ select ... from ...;
 
 
 
+
 # 4.函数 Functions
 
 ## 4.1 Built-in functions
@@ -326,7 +327,7 @@ from test.T0915B;
 
 #### 4.1.4.6 LATERAL VIEW Explode
 
-侧视图的意义是配合`explode`（或者其他的UDTF），一个语句生成把单行数据拆解成多行后的数据结果集。
+侧视图的意义是配合`explode`（或者其他的UDTF），一个语句生成把单行数据拆解成多行后的数据结果集。可以再侧视图语句之后加`WHERE` 语句。
 
 ```sql
 select wc_id,
