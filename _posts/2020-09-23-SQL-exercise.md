@@ -500,3 +500,472 @@ from t1;
 
 ```
 
+# 十一、货拉拉互联网物流场景
+
+有如下两张表：
+
+![2020-09-23-SQL-exercise](/assets/2021-09-23-SQL-exercise-1.png)
+
+```sql
+-- 用车方和司机被禁止(banned=1)的比率分别为？
+select role,
+       sum(case when banned=1 then 1 else 0 end) /count(role)
+from hll_t2
+group by role;
+
+--2021年11月25日的订单完成率为?
+select sum(case when status='completed' then 1 else 0 end) /count(order_id)
+from hll_t1
+where order_dt = '2021-11-25';
+
+/*
+ 订单完成率是极为重要的指标，基本反应了产品服务的根本交付质量是否达标，是否符合用户的需求和标准。
+ 所以该指标通常是需要持续每天关注的，若看到该指标下降：可以考虑几个方面：
+ 1）是否是周末？
+ 2）是否极端天气？
+ 3）取消方是谁？
+ 具体定位原因，然后和业务方、产品等反馈，解决优化问题
+ */
+
+--用车至少两次，且主动取消过至少1次的用车方有多少名？
+select count(distinct user_id)
+from hll_t1 a inner join(
+select user_id
+from hll_t1
+group by user_id having count(user_id)>=2) b
+inner join on a.user_id = b.user_id
+where status = 'cancel_by_usr'
+group by a.user_id having count(a.user_id)>=1;
+
+
+--10月北京、上海的非禁止用车方的用车取消率分别为？
+with not_banned as(
+    SELECT usr_id
+    FROM hll_t2
+    where banned = 0
+    and role = 'usr'
+    )
+
+select sum(case when status = 'cancel_by_usr' then 1 else 0 end) / count(order_id)
+from hll_t1 a
+inner join  not_banned b on a.usr_id = b.usr_id
+where cty in ('北京','上海')
+and order_dt >='2021-10-01'
+and order_dt <'2021-11-01';
+```
+
+# 十二、物联网公司场景
+
+例1.【小米】统计外电网各个设备的断电次数及断电时长，其中外电网正常状态为0，断电状态为1。统计断电次数，即是外电网的状态从0-1的变化次数。dt表示上报消息的时间，一分钟上报一次。
+
+test.T1018数据格式：sid:设备ID - dt: 时间 (时间戳) - sta:外电网状态。
+
+```sql
+create table test.T1018 (
+    sid int,
+    dt string,
+    sta int
+);
+
+insert into test.T1018 values
+(1,"2021-06-18 10:11:12",0),
+(1,"2021-06-18 10:12:10",1),
+(1,"2021-06-18 10:13:00",1),
+(1,"2021-06-18 10:14:01",1),
+(1,"2021-06-18 10:15:00",1),
+(1,"2021-06-18 10:16:02",0),
+(1,"2021-06-18 10:17:01",1),
+(1,"2021-06-18 10:18:00",1),
+(1,"2021-06-18 10:19:03",1),
+(1,"2021-06-18 10:20:04",0),
+(2,"2021-06-18 10:11:13",0),
+(2,"2021-06-18 10:12:00",0),
+(2,"2021-06-18 10:13:00",1),
+(2,"2021-06-18 10:14:00",1),
+(2,"2021-06-18 10:15:00",0);
+
+--1.统计断电次数，即是外电网的状态从0-1的变化次数
+with temp as (
+
+    select *,
+           lag(sta,1,null) over(partition by sid order by dt) as next_sta,
+           lag(dt,1,null) over(partition by sid order by dt) as next_dt
+    from test.T1018
+)
+
+select sid,count(dt) as cnt_stop
+from temp
+where next_sta = 0 and sta = 1
+group by sid
+;
+
+--求每次断电后断电时长,以及断电开始时间和结束时间
+with temp as (
+
+    select *,
+           lag(sta,1,null) over(partition by sid order by dt) as next_sta,
+           lag(dt,1,null) over(partition by sid order by dt) as next_dt
+    from test.T1018
+),
+     temp1 as (
+
+    select sid,dt,sta
+    from temp
+    where sta = 1 and next_sta = 0
+    union all
+    select sid,dt,sta
+    from temp
+    where sta = 0 and next_sta = 1
+     ),
+/*
+或者
+select sid,dt,sta
+from temp
+where (sta = 1 and next_sta = 0) or (sta = 0 and next_sta = 1);
+*/
+     temp2 as (
+
+    select *,
+           lag(sta,1,null) over(partition by sid order by dt) as next_staus,
+           lag(dt,1,null) over(partition by sid order by dt) as next_time
+    from temp1
+     )
+
+select sid,next_time as '断电开始时间',dt as '断电结束时间',
+       unix_timestamp(dt) - unix_timestamp(next_time) as '断电持续时间'
+from temp2
+where sta = 0 and next_staus = 1;
+```
+
+例2.如下表所示：gw_id代表网关id,sensor_id代表设备id,avg_gd_vol代表每天的轨道电压均值点，compute_day代表日期
+
+```sql
+create table if not exists test.gd_vol(
+            gw_id int,
+            sensor_id string,
+            avg_gd_vol float,
+            compute_day string
+        );
+--gw_id,sensor_id,avg_gd_vol,compute_day
+insert into test.gd_vol values
+(1001,'123456',18.5,'2017-07-01'),
+(1001,'123456',0.6,'2017-07-02'),
+(1001,'123456',10.1,'2017-07-03'),
+(1001,'123456',10.2,'2017-07-04'),
+(1001,'123456',18.9,'2017-07-05'),
+(1001,'123456',10.3,'2017-07-06'),
+(1001,'123456',13.5,'2017-07-07'),
+(1001,'234567',17.1,'2017-07-01'),
+(1001,'234567',15.8,'2017-07-02'),
+(1001,'234567',15.4,'2017-07-03'),
+(1001,'234567',16.1,'2017-07-04'),
+(1001,'234567',0.1,'2017-07-05'),
+(1001,'234567',15.8,'2017-07-06'),
+(1001,'234567',15.5,'2017-07-07');
+```
+
+现在要求以7天 为观察窗口，每天进行滑动计算7天内指标的异常值,异常趋势分析算法如下：
+
+**计算滑动窗口（按1天滑动）内的点与其余各点之间的距离之和的平均值，作为特征指标**，例如第一条数据的`avg_gd_vol`是18.5,则整个滑动区间有7个数分别为[18.5,0.6,10.1,10.2,18.9,10.3,13.5]，所以计算方式为：
+$$
+(| 18.5 - 18.5 | + |18.5 - 0.6| + ...+|18.5 - 13.5|) /6
+$$
+
+```sql
+with t as (
+select gw_id
+           ,sensor_id
+           ,avg_gd_vol
+           ,compute_day
+           ,collect_list(avg_gd_vol) over(partition by gw_id,sensor_id) as avg_gd_vol_list
+from test.gd_vol
+)
+select gw_id
+,sensor_id
+,compute_day
+,cast(((abs(avg_gd_vol - avg_gd_vol_list[0]) + abs(avg_gd_vol - avg_gd_vol_list[1]) + 
+      abs(avg_gd_vol - avg_gd_vol_list[2])+ abs(avg_gd_vol - avg_gd_vol_list[3])+ 
+      abs(avg_gd_vol - avg_gd_vol_list[4])+ abs(avg_gd_vol - avg_gd_vol_list[5])+ 
+      abs(avg_gd_vol - avg_gd_vol_list[6]))/6) as decimal(6,2))*100 as avg_d
+from t 
+;
+```
+
+这个写法有几个值得注意的点：
+
+1. `collect_list() over(partition by ..) `窗口函数
+2. `collect_list` 生成list后，就可以用切片了，如`avg_gd_vol_list[0]` 取第一个数
+3. `cast(... as decimal(6,2))` 这种四舍五入会比`round`准一些
+
+还有一种写法,用到了`lateral view explode()`
+
+```sql
+select gw_id
+      ,sensor_id
+      ,avg_gd_vol
+      ,compute_day
+      ,avg_d
+from(
+   select gw_id
+        ,sensor_id
+        ,avg_gd_vol
+        ,compute_day
+        ,cast((sum(abs(avg_gd_vol-avg_gd_vol_list_expl)) over(PARTITION by gw_id,sensor_id,compute_day) / (count(abs(avg_gd_vol-avg_gd_vol_list_expl)) over(PARTITION by gw_id,sensor_id,compute_day) -1))  as decimal(6,2))*100 as avg_d
+        ,row_number() over(PARTITION by gw_id,sensor_id,compute_day order by compute_day) as rn
+   from(
+      select gw_id
+        ,sensor_id
+        ,avg_gd_vol
+        ,collect_list(cast(avg_gd_vol as string)) over(PARTITION by gw_id,sensor_id) as avg_gd_vol_list
+        ,compute_day
+      from test.gd_vol 
+      ) t lateral view explode(avg_gd_vol_list) tt as avg_gd_vol_list_expl
+   ) m
+where rn = 1;
+```
+
+# 十三、斗鱼直播平台场景
+
+数据为主播ID,stt表示开播时间，edt表示下播时间。
+
+```sql
+create table if not exists test.play(
+id int,
+stt string,
+edt string
+);
+
+insert into test.play values
+(1001,'2021-06-14 12:12:12','2021-06-14 18:12:12'),
+(1003,'2021-06-14 13:12:12','2021-06-14 16:12:12'),
+(1004,'2021-06-14 13:15:12','2021-06-14 20:12:12'),
+(1002,'2021-06-14 15:12:12','2021-06-14 16:12:12'),
+(1005,'2021-06-14 15:18:12','2021-06-14 20:12:12'),
+(1001,'2021-06-14 20:12:12','2021-06-14 23:12:12'),
+(1006,'2021-06-14 21:12:12','2021-06-14 23:15:12'),
+(1007,'2021-06-14 22:12:12','2021-06-14 23:10:12');
+```
+
+**1.该平台某一天主播同时在线人数最高为多少？**
+
+分析思路：首先我们需要将这样一条记录进行拆分，分成不同的记录或数据流进入累加器，然后给每条记录进行标记，如果开播的话该条记录记为1，下播的话记为-1，此时的数据流按照时间顺序依次进入累加器，然后在累加器中进行叠加，其中累计的结果最大时候就是所求的结果。
+
+**其实本质是利用累加器思想，但进入累加器的数据是按时间排好序的时序流数据（数据进入按时间先后顺序进入）。**
+
+```sql
+select max(cur_cnt)
+from(
+	select id
+		 ,dt
+		 ,sum(flag) over(order by dt) as cur_cnt
+	from(
+		select id,stt dt , 1 flag from play
+		union
+		select id,edt dt ,-1 flag from play
+	) t
+) m
+```
+**出现高峰时的时间段，也就是高峰时间的起始时间及结束时间，或持续时长**
+
+```sql
+with
+t1 as (
+
+     select id,stt dt , 1 flag from play
+     union
+     select id,edt dt ,-1 flag from play
+
+),
+
+t2 as (
+
+    select id
+           ,dt
+           ,flag
+           ,sum(flag) over(order by dt) as cur_cnt
+           ,lead(dt,1,null) over(order by dt) as next_dt
+    from t1
+),
+
+t3 as (
+
+    select max(cur_cnt) as max_cur
+    from t2
+
+)
+
+select  id
+        ,dt as start_time
+        ,next_dt as end_time
+        ,unix_timestamp(next_dt) - unix_timestamp(dt) as duration
+from t2
+where cur_cnt = (select distinct max_cur from t3);
+```
+
+总结：
+
+事实上该问题的分析在业务上具有重要的意义，我们能够实时跟踪随着时间变化的在线人数，了解服务器的负载变化情况，服务器的实时并发数等。该问题在不同业务场景下，有不同意义，比如某个游戏的同时在线人数，比如某个服务器的实时并发数，比如某个仓库的货物积压数量，某一段时间内的同时处于服务过程中的最大订单量等。实际上求最大在线人数和求实时在线人数是一回事，最大人数依赖于当前在线人数表，只有先求出当前在线人数表，才能求出最大同时在线人数。
+
+# 十四、京东电商场景
+
+如下为电商公司用户访问时间数据：test.t1027表
+
+```
+id	         ts - 访问时间戳
+1001	17523641234
+1001	17523641256
+1002	17523641278
+1001	17523641334
+1002	17523641434
+1001	17523641534
+1001	17523641544
+1002	17523641634
+1001	17523641638
+1001	17523641654
+```
+
+某个用户相邻的访问记录如果时间间隔小于 60 秒，则分为同一个组，结果为
+
+```sql
+id	         ts	     groupid
+1001	17523641234	   1
+1001	17523641256	   1
+1001	17523641334	   2
+1001	17523641534	   3
+1001	17523641544    3
+1001	17523641638	   4
+1001	17523641654	   4
+1002	17523641278	   1
+1002	17523641434	   2
+1002	17523641634	   3
+```
+
+```sql
+with 
+--这一步是在做数据类型处理；可忽略。重点看一下下面的逻辑：累加器
+t as (
+    select cast(id as int) as id,
+           cast(ts as bigint) as ts
+    from test.t1027
+), 
+     t1 as(
+         select *,
+       lag(ts,1,0) over(partition by id order by ts) as last_ts,
+       ts -  lag(ts,1,0) over(partition by id order by ts) as diff
+        from t
+     ),
+
+     t2 as (
+         select *,
+         case when diff > 60 then 1 else 0 end as flag
+         from t1
+     )
+
+select id,
+       ts,
+       sum(flag) over(partition by id order by ts) as groupid
+from t2
+;
+```
+
+# 十五、米哈游游戏场景
+
+ test.t1028记录了用户每日登陆数据：
+
+```sql
+create table if not exists test.t1028(
+id int,
+dt string);
+
+insert into test.t1028 values
+(1001,'2021-12-12'),
+(1001,'2021-12-13'),
+(1001,'2021-12-14'),
+(1001,'2021-12-16'),
+(1001,'2021-12-19'),
+(1001,'2021-12-20'),
+(1002,'2021-12-12'),
+(1002,'2021-12-16'),
+(1002,'2021-12-17');
+```
+
+ 计算每个用户最大的连续登录天数.
+
+这道题可以用第十点。计算连续天数的方法：
+
+```sql
+with t as (
+   select *,
+       to_date(date_sub(dt,row_number() over (partition by id order by dt))) as diff
+from test.t1028
+),
+t1 as(
+select id,count(diff) as cnt
+from t
+group by id,diff
+    )
+select id,max(cnt)
+from t1
+group by id
+;
+```
+
+现在介绍另一种方法，重分组思想【使用hive实现】
+
+```sql
+with t as(
+select *,
+    datediff(dt,lag(dt,1,dt) over(partition by id order by dt)) rd
+    from test.t1028
+    ),
+   
+    t1 as(
+    select *,
+    sum(if(rd>1,1,0)) over(partition by id order by dt) as flag
+    from t
+    ),
+    
+    t2 as (
+    
+    select id,count(flag) as cnt
+    from t1
+    group by id,flag
+    )
+    
+    select id,max(cnt)
+    from t2
+    group by id;
+    
+```
+
+这样写有一个好处，如果不是连续一天，而是可以间隔2天、3天都算连续，那这个方法会比第一种好。
+
+比如：计算每个用户最大的连续登录天数，可以间隔一天。**解释：如果一个用户在 1,3,5,6 登录游戏，则视为连续 6 天登录。**
+
+```sql
+with t as(
+select *,
+    datediff(dt,lag(dt,1,dt) over(partition by id order by dt)) rd
+    from test.t1028
+    ),
+    
+    t1 as(
+    select *,
+            sum(if(rd>2,1,0)) over(partition by id order by dt) as flag
+    from t
+    ),
+    
+    t2 as (
+    
+    select id,datediff(max(dt),min(dt))+1 as cnt
+    from t1
+    group by id,flag
+    )
+    
+    select id,max(cnt)
+    from t2
+    group by id;
+```
+
+这个方法还是很好用的~
+

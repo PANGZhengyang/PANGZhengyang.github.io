@@ -240,7 +240,7 @@ $$
 
 ### 点估计
 
-1. 样本均值$\overline x$是总体均值$mu$的点估计；
+1. 样本均值$\overline x$是总体均值$\mu$的点估计；
 
 2. 样本标准差 $s$是总体标准差$\sigma$的点估计；
 
@@ -261,6 +261,7 @@ $$
 所以样本方差的期望：
 
 $x_i$ 是来自总体的样本，$\overline X$ 是该样本的均值
+
 $$
 E(S^2) = E[\frac{1}{n-1}\sum_{i=1}^{n}(x_i-\overline X)^2]=\frac{1}{n-1}E[(\sum_{i=1}^{n}x_i^2-2\sum_{i=1}^{n}x_i\overline X+n\overline X^2)] \\
 =\frac{1}{n-1}E[(\sum_{i=1}^{n}x_i^2-2n\frac{1}{n}\sum_{i=1}^{n}x_i\overline X+n\overline X^2)]=
@@ -270,6 +271,7 @@ E(S^2) = E[\frac{1}{n-1}\sum_{i=1}^{n}(x_i-\overline X)^2]=\frac{1}{n-1}E[(\sum_
 \because D(\overline X) = E(\overline X^2) - E^2(\overline X) \Rightarrow E(\overline X^2) = D(\overline X) +E^2(\overline X) = \frac{\sigma^2}{n} +\mu^2 \\
 代入上式:E(S^2) =   \frac{1}{n-1}[n\sigma^2+n\mu^2-\sigma^2-n\mu^2] = \sigma^2
 $$
+
 几个概念的补充：
 
 1. 自由度：互相**独立**变量的个数
@@ -297,14 +299,15 @@ $$
 置信度：`1-a` 其中`a`表示显著性水平
 
 几个比较重要的定理,上面的分布已经证明过
+
 $$
 \overline X \sim N(\mu, \frac{\sigma^2}{n}) \Rightarrow \frac{\overline X - \mu}{\frac{\sigma}{\sqrt n}} \sim N(0,1) \\
 \frac{\overline X - \mu}{\frac{s}{\sqrt n}} \sim t(n-1) \\
 \frac{(n-1)s^2}{\sigma^2} \sim \chi^2(n-1)
 $$
 
-总体均值区间估计：
 
+总体均值区间估计：
 - 当$\sigma$已知：
   $$
   \overline X \pm z_\frac{a}{2}{\frac{\sigma}{\sqrt n}}

@@ -19,12 +19,15 @@ katex: true
 ## AB Test样本量公式
 
 **每一个实验组**所需的样本量计算公式如下：
+
 $$
 N = \frac{(z_{1-\frac{\alpha}{2}}+z_{power})^2 \ \sigma^2}{\delta^2} \\
 \sigma -样本标准差 \\
 \delta -组间预期差值
 $$
+
 通常 a 取0.05，power取0.8 所以公式近似可得：
+
 $$
 N=\frac{8 \sigma^2}{\delta^2}
 $$
@@ -78,5 +81,5 @@ $$
 
    方差是用来表征评价指标的波动性的，方差越大，说明评价指标的波动范围越大，也越不稳定，那就更需要更多的样本来进行实验，从而得到准确的结果。
 
-	![](/assests/2021-05-02-abtest-sample-size1.jpg)
+	![](/assets/2021-05-02-abtest-sample-size1.png)
 

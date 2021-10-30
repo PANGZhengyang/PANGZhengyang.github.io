@@ -30,7 +30,7 @@ katex: true
 
 3. 利用统计检验量的值求出p-value
 
-4. 如果$p-value \leg \alpha$则拒绝$H_0$
+4. 如果$p-value \leq \alpha$则拒绝$H_0$
 
    
 
@@ -96,11 +96,15 @@ $$
 ### 单一正态总体比率假设检验
 
 $\overline p$的期望值等于假设值$p_0$
+
+
 $$
 E(\overline p) = p_0 \\
 \sigma_\overline p = \sqrt \frac {p_0(1-p_0)}{n}
 $$
+
 因为$np \geq 5$并且$n(1-p) \geq5$则$\overline p$的抽样分布近似服从正态分布，所以有：
+
 $$
 z = \frac {p-p_0}{\sigma_\overline p}= \frac{p-p_0}{\sqrt \frac {p_0(1-p_0)}{n}}
 $$

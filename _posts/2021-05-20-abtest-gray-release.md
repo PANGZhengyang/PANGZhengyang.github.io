@@ -1,11 +1,27 @@
 ---
 layout: post
-title: "ABTest灰度上线"
-date: 2021-08-02
+title: "ABTest流量分割与灰度上线"
+date: 2021-05-20
 description: "ABTest灰度上线"
 tag: 数据分析
 mermaid: true
 ---
+
+这一部分是比较偏向于工程设计，接触的比较少，仅记录所了解到的内容。
+
+流量分割主要分为：
+
+## 分桶
+
+以算法类的测试为例，比如我们有100%的流量，将其中的50%流量分给召回算法，把剩下的50%流量分给精排算法。一个用户只能进入一个桶，这不利于对流量的利用，如果以10%的流量为一桶，那么100%的流量只能做10个测试。
+
+## 分层
+
+同一份流量可以分布在多个实验层，也就是说同一批用户可以出现在不同的实验层，前提是各个实验层之间无业务关联，保证这一批用户都均匀地分布到所有的实验层里，达到用户“正交”的效果就可以。所谓的正交分层，其实可以理解为互不影响的流量分层，从而实验流量复用的效果。还是以上述的算法类测试为例，可以把召回算法分为一层，精排算法分为一层。因为召回出来的结果需要汇聚之后送到精排层做排序。这种情况下每层都是100%的流量，可以进行流量的充分利用。
+
+## 分层分桶
+
+工业界最常用的是将两种方法结合起来使用，比如召回100%的流量，召回中又分为多路召回，在召回层中我们可以采样分桶切分方式，将流量切分为若干个桶，比如1-10，然后选定基准桶（假设编号为1），然后在剩下的2-10个桶里进行不同的召回试验。同样可以将精排层的流量划分为若干个桶，每个桶进行不同的模型试验、不同的特征试验、不同的参数试验等。
 
 我们都知道ABTest主要是围绕用户进行的实验，从统计意义上观察用户对不同的产品设计、交互体验、业务流程的反馈，从而指导产品的改进方向。那么很重要的一点就是如何进行分桶。与已知样本总量去切分比例不同，灰度上线时我们不知道用户总量会是多少，因此在线上如何实现具体的切分算法十分关键。
 
@@ -60,41 +76,15 @@ pie title 切分结果
     "A": 5025
     "B": 4975
 </div>
-
 可以观察到切分结果还算均衡。
 
-### Java实现
+## 灰度上线
 
-```java
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+一般在上线正式实验之前，会通过小流量去看一段时间的灰度实验。这个灰度实验的目的就是为了
 
+1. 验证我们这个改动并不会造成什么特别极端的影响。
 
-public class App {
+2. 验证的实验测试是否真的触发了
 
-    public static boolean gray_release(String prefix, String key, double low, double high) {
-        String input = prefix + key;
-        double result = 0;
-        MessageDigest md = null;
-        try {
-            md = MessageDigest.getInstance("SHA-256");
-            byte[] messageDigest = md.digest(input.getBytes());
-            byte[] firstUnsignedLong = new byte[8];
-            for (int i = 0; i < 8; i++) {
-                firstUnsignedLong[7 - i] = messageDigest[i];
-            }
-            BigInteger numerator = new BigInteger(1, firstUnsignedLong);
-            BigInteger denominator = new BigInteger("18446744073709551616", 10);
-            result = numerator.doubleValue() / denominator.doubleValue();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return result >= low && result < high;
-    }
+3. 验证同一个用户只能在同一个桶中
 
-    public static void main(String[] args) {
-        System.out.println(gray_release("test", "326357626", 0, .5));
-    }
-}
-```
