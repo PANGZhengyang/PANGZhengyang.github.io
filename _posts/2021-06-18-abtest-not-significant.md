@@ -24,7 +24,7 @@ N = \frac{(z_{1-\frac{\alpha}{2}}+z_{power})^2 \ \sigma^2}{\delta^2} \\
 $$
 可得出影响Power 的因素 主要有两个：样本量和方差
 $$
-z_{power} = \frac{{\sqrt N} {\delta}}{\sigma} - z_{1-{\frac{\alpha}{2}}}
+z_{power} = \frac{\sqrt N \delta}{\sigma} - z_{1-{\frac{\alpha}{2}}}
 $$
 
 - Power 和样本量成正比
