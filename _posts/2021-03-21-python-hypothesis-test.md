@@ -37,6 +37,20 @@ arr2 = np.array([510, 670, 480, 800, 690, 530, 590, 620,
 sw.ztest(arr1,arr2,value=0) #H0：总体1的均值-总体2的均值=0
 ```
 
+对于比例的检验，通常使用z-test
+
+```python
+from statsmodels.stats.proportion import proportions_ztest
+proportion_ztest(count，nobs，value = None，Alternative =‘two-side’)
+```
+
+```python
+from statsmodels.stats.proportion import proportions_ztest 
+
+z_score, p_value = proportions_ztest([3124, 1598], [80723, 80689], alternative='two-sided')
+print('p_value={:.5f}'.format(p_value),'z_score=%.3f'%z_score)
+```
+
 ## t-test
 
 小样本（样本量小于30个），一般用 t 检验。对于 t 检验，可以根据样本特点，用 scipy 包中的 ttest_1sample（单样本 t检验函数），ttest_ind（两个独立样本的 t 检验），ttest_rel （两个匹配样本的 t 检验）。但这些函数得到都是双侧 t 检验的 p 值。如果是单侧检验，我们还要进行一些换算，得到单侧检验的 p 值。
