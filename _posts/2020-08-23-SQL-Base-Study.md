@@ -121,14 +121,24 @@ select ... from ...;
     
     
 
-# 3.运算符
+# 3.运算符与关键字
 
 ## 3.1 like/rlike/ilke的区别
     like是通配符:不区分大小写;
     ilike:区分大小写；
     rlike是正则，和regexp相同 正则相关知识请参考[正则表达式](https://blog.csdn.net/weixin_40907382/article/details/79654372)
 
-  
+## 3.2 Null
+
+ SQL NULL（UNKNOW）是用来代表缺失值或无意义值的术语，在表中的NULL值是显示为空白字段的值，用作不知道数据的具体值，或者不知道数据是否存在，或者数据不存在等情况。
+
+- 对NULL进行判断处理时，只能采用IS NULL或IS NOT NULL，而不能采用=, <, <>, !=这些操作符！
+- count( * )操作时会统计null值，count(列名)会忽略null值与max(),min(),avg()函数作用时都会忽略NULL值计算事实上NULL除了count( * ),与聚合函数运算时均会忽略null值
+- 与NULL值进行算数运算时，其操作结果都为null
+- NULL 参与 Group by的分组计算时，此时NULL值会被单独作为一个列进行分组，而不会被忽略
+- NULL参与distinct 此时NULL会参与计算，会进行排重，过滤后会有一个NULL值
+
+
 
 
 
@@ -325,7 +335,7 @@ from test.T0915B;
 
 但是`explode`只能查一个字段，且UDTF `explode`不能写在别的函数内；如果要查多个字段要用侧视图
 
-#### 4.1.4.6 LATERAL VIEW Explode
+#### 4.1.4.6 LATERAL VIEW Explode （Hive）
 
 侧视图的意义是配合`explode`（或者其他的UDTF），一个语句生成把单行数据拆解成多行后的数据结果集。可以再侧视图语句之后加`WHERE` 语句。
 
@@ -345,7 +355,7 @@ wc_id	uid1
 
 ```
 
-#### 4.1.4.7 map
+#### 4.1.4.7 map （Hive）
 
 ```sql
 create table test.T0919
@@ -389,11 +399,11 @@ id   bool  value
 2       yes  65
 ```
 
-#### 4.1.4.8 concat_ws()
+#### 4.1.4.8 concat_ws() 
 
 链接多个字符串，`concat_ws(seq,string A,string B...)`
 
-#### 4.1.4.9 collect_set() 和collect_list()
+#### 4.1.4.9 collect_set() 和collect_list() （Hive）
 
 一般和`group by`连用，形成一个list，collect_set 是去重的，collect_list是不去重的。
 
@@ -428,7 +438,30 @@ a  b  ["1","2","3"]
 c  d  ["4","5",]
 ```
 
+### 4.1.4.10 arrary_contains （Hive）
 
+```sql
+-- array()：返回数组
+select user_id,pay_amount,array(user_id,pay_amount) as a
+from test.t1123;
+
+/*
+array_contains(数组,数): 检索一个数组是否包括一个数
+!array_contains(数组,数): 不包含
+*/
+
+with t as (
+select user_id,pay_amount,array(user_id,pay_amount) as a
+from test.t1123
+)
+-- 返回的是True，False
+select array_contains(a,pay_amount) as test 
+from t ;
+```
+
+### 4.1.4.11 size （Hive）
+
+array的大小
 
 ## 4.2 汇总函数 Aggregate Functions
 
@@ -495,7 +528,7 @@ Analytic functions are usually used with `OVER`, `PARTITION BY`, `ORDER BY`, and
 from impala.dbapi import connect
 from impala.util import as_pandas
 
-    conn = connect(host='******', auth_mechanism='PLAIN', port=10000, user='lijiaxiang',                                password='******')
+    conn = connect(host='******', auth_mechanism='PLAIN', port=10000, user='pangzhengyang',                                password='******')
     cursor = conn.cursor()
     cnt = 1
 

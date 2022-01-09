@@ -1,15 +1,84 @@
 ---
 layout: post
-title: "Python Base Study"
-date: 2020-08-23
+title: "Python Base Study——Pandas"
+date: 2020-04-23
 description: "Python学习笔记"
 tag: Python
 ---
 
-This is my note for Python (including pandas, numpy, matplotlib and so forth). When I face some tricky problems, I'll record them.
+This is my note for Python for Pandas. When I face some tricky problems, I'll record them.
 Let's start!
 
-# 1.Rename: 更改名字
+# Pandas 数据输出显示设置
+
+````python
+pd.set_option('参数名',参数值)
+
+```
+参数名：
+1.display.max_rows:最大显示行数，超过该值用省略号代替，为None时显示所有行。
+2.display.max_columns:最大显示列数
+3.display.precision: 数据小数点
+4.display.max_colwidth: 每列最大字符宽度
+```
+
+pd.set_option('float_format', lambda x: '%.3f' % x) #取消科学计数法
+
+# 还原所有显示设置
+pd.reset_option('display')
+
+# 忽略警告
+import warnings
+warnings.filterwarnings('ignore')
+
+#基于style个性化设置
+#隐藏索引列
+.style.hide_index()
+
+#标记缺失值 并 高亮
+.style.set_na_rep('数据缺失').highlight_null(null_color='yellow')
+
+#同时高亮数值列最大值和最小值
+.style.highlight_max(color='blue').highlight_min(color='#26BE49')
+
+# 修改字体颜色
+.style.set_properties(subset=['salary'], **{'color': 'red'}).set_properties(subset=['matchScore'], **{'color': 'blue'})
+
+# 导出样式
+.style.set_properties(**{'background-color': '#F8F8FF','text-align':'center', 'font-size': '13px'})
+.set_properties(subset=['salary'], **{'color': 'red'}).to_excel('带有样式导出.xlsx')
+
+````
+
+# Pandas 三大数据结构
+
+1. Series：带`index`的一维`array`,特殊字典
+
+   ```python
+   pd.Series(data, index)
+   # data: list,array, 标量 也可以为dict: keys-> index
+   ```
+   
+2. DataFrame：二维数组，特殊字典，一个`key`映射一列`Series`数据
+
+3. Index：不可变数组，有序几何
+
+# 合并数据
+
+```python
+pd.concat([df1, df2], axis=0, ignore_index=False, join='outer', join_axes=['A', 'B'])
+'''
+axis=0 : 竖向链接
+ignore_index=True ：重新建索引
+join='inner' ：两个df2 都有的列名
+join_axes=['A','B'] :合并A,B列
+'''
+
+pd.merge(right, left, how='inner', on=None, left_on=None, right_on=None, left_index=None, right_index=None)
+```
+
+# Rename: 更改名字
+
 ```python
 df.rename(index ={'a':1},inplace = True)
 df.rename(columns = {'guiyang':2},inplace = True)
@@ -17,8 +86,8 @@ df.rename(columns = {'guiyang':2},inplace = True)
 #如果只是改index的名字的话
 df.index.name = xxx
 ```
-# 2.Hierarchical Index: 多层索引
-##  2.1多层索引的创建
+# Hierarchical Index: 多层索引
+##  多层索引的创建
 
 
 ```python
@@ -38,7 +107,7 @@ df
 #method 2: 使用set_index(['name','examl']);当然格式和上面的方法不一样，只是set_index可以构建多层索引
 ```
 
-## 2.2多层索引的取值
+## 多层索引的取值
 
 ```python
 #使用 .loc[]
@@ -52,11 +121,11 @@ df.loc['张三','期末']
 ```
 
 
-## 2.3多层索引的排序
+## 多层索引的排序
 
 
 ```python
-# 使用sort_index 问了展示的更好 用下面的例子
+# 使用sort_index 为了展示的更好 用下面的例子
 import pandas as pd
 import numpy as np 
 
@@ -171,7 +240,7 @@ print(df.sort_index(level=1))
     c 3    12   78      41
 ```
 
-## 2.4set_index() 与 reset_index()
+## set_index() 与 reset_index()
 1.set_index('country',drop = True) 将‘country’这一列作为index ,drop = True 删除用作新索引的列（也就是把之前的‘country'列删了）! **宽表变为长表**
 
 2.reset_index(drop= True)  第一种是对原来的数据表的index进行reset： 如果这个表有数据删除 则用reset_index重排一下index ,drop = True的话 要删除之前的index!
@@ -340,9 +409,7 @@ df.set_index(['Python'],drop = True)
 </table>
 
 
-
-
-## 2.5stack()和unstack()
+## stack()和unstack()
 stack: 将数据从”表格结构“变成”花括号结构“，即将其列索引变成行索引。
 
 unstack: 数据从”花括号结构“变成”表格结构“，即要将其中一层的行索引变成列索引。
@@ -406,7 +473,7 @@ print(data4)
     store4        3        7       11
 ```
 
-## 2.6pivot()和pivot_table() 
+## pivot()和pivot_table() 
 
 
 ```python
@@ -549,7 +616,7 @@ df.pivot(index = 'street',columns=['store'],values='num')
   </tbody>
 </table>
 
-## 2.7 Crosstab
+##  Crosstab
 ```python
 #默认情况下，crosstab计算因子的频率表，比如用于str的数据透视分析
 pd.crosstab(index,columns,values,aggfunc)
@@ -559,7 +626,7 @@ pd.crosstab(df['A'],df['B']) #要写成index
 ```
 
 
-# 3.缺失值
+# 缺失值
 
 在做数据预处理是，会关注missing value：
 
@@ -571,12 +638,22 @@ df.isnull()
 df.info()
 # 哪一列具有缺失值
 df.isnull().any()
+
+# 每列有多少缺失值
+df.isnull().sum()
+
+# 总共有多少缺失值
+df.isnull().sum().sum()
 ```
 
 2）定位哪些行具有缺失值：
 
-```py
+```python
 df.loc[df.isnull().values]
+df.drop_duplicates() # 要加一步去重
+
+# 第二种方法:
+df[df.isnull().T.any()==True]
 ```
 
 3）删除：
@@ -591,12 +668,12 @@ df.dropna()
 #用xxx列的均值填充
 df['xxx'].fillna(df['xxx'].mean())
 
-#用插值法填充
+#用插值法填充：缺失值的上下均值填充
 df['xxx'] = df['xxx'].interpolate()
 
 ```
 
-# 4.重复值
+# 重复值
 
 在数据预处理的过程中，重复值也有可能使我们要关注的：
 
@@ -606,22 +683,229 @@ df.duplicated()
 df.drop_duplicates(inplace=True)
 ```
 
-# 5.Pandas 数据输出显示设置
+# 切分数据
 
-```py
-pd.set_option('参数名',参数值)
+```python
+# 等距切分 distance = (max-min)/bins
+pd.cut(x, bins, right=True, labels=[])
 
-#参数名：
-1.display.max_rows:最大显示行数，超过该值用省略号代替，为None时显示所有行。
-2.display.max_columns:最大显示列数
-3.display.precision: 数据小数点
+# 等频切分 quantile,每个bin里面的数据量相等
+pd.qcut(x, q, labels=[])
+```
 
-pd.set_option('float_format', lambda x: '%.3f' % x) #取消科学计数法
+# Groupby 与窗口函数
+
+````python
+```
+groupby() 	 --> aggreate({'A':np.sum,'B':np.median}) / aggreate([np.sum, np.median])
+			--> fliter(函数)
+			--> transform(函数)
+			--> apply(函数)
+```
+# pandas 实现hive 窗口函数
+df = pd.DataFrame({'age':[12,20,12,5,18,11,18],
+                   'name':['A','B','A','B','B','A','A']})
+df['row_number'] = df['age'].groupby(df['name']).rank(ascending=True,method='first')
+print(df)
+
+'''
+rank(ascending=True, method= ) 
+'first' = row_number 1,2,3,4
+'dense' = dense_rank 1,2,2,3
+'min' = rank 1,2,2,4
+'''
+````
+
+# 排序
+
+```python
+sort_index()
+sort_values(by = '某一列')
+```
+
+# 时间序列
+
+## pandas时间序列的数据结构
+
+- Timestamp：时间戳，某一刻的时间。`pd.Timestamp()` -> `DatetimeIndex`
+- Period: 时期，一段时间。->`PeriodIndex`
+- Timedelta: 时间间隔。 ->`TimedeltaIndex`
+
+## 时间戳
+
+```python
+pd.Timestamp()
+pd.to_datetime()
+# 如果传入单一时间：Timestamp
+# 如果传入多个时间： DatetimeIndex
+
+pd.date_range()
+# pd.date_range(start=None, end=None, periods=None, freq='D', tz=None, normalize=False, name=None, closed=None, **kwargs)
+# start：开始时间
+# end：结束时间
+# periods：偏移量
+# freq：频率，默认天，pd.date_range()默认频率为日历日，pd.bdate_range()默认频率为工作日
+# tz：时区
+# normalize：时间参数值正则化到午夜时间戳（这里最后就直接变成0:00:00，并不是15:30:00）
+# name：索引对象名称
+# closed：默认左闭右闭 left左闭右开
+
+pd.bdate_range() #工作日
+
+#将时间转换为字符串
+dt.strftime('%Y-%m-%d') 
+
+#将字符串转换为时间戳
+datetime.strptime('2021-01-01 12:00:00')
+
+#频率转换
+.asfreq()
+```
+
+## 时期Period
+
+```python
+# 时间戳转时期
+pd.to_period()
+
+# 时期转时间戳
+pd.to_timestamp()
+
+# 重采样
+# resample() 一个频率转换为另一个频率，数据会发生结合，累计值
+resample('5D').sum() #5天总和
+asfreq('5D') #最后一天的值
+
+#重采样中有升采样和降采样 ：
+#升采样比如1天分成多个小时：这个时候会增加数据，所以要考虑数据的填充
+#降采样比如天变成月：这个时候可以取累计，也可以取第一条或最后一条
 ```
 
 
 
+# 高性能Pandas
 
+## pandas.eval()实现高性能计算
+
+```python
+# pd.eval() 用字符串代数式实现DataFrame的高性能基计算
+import pandas as pd
+nrows, ncols = 100000, 100
+rng = np.random.RandomState(42)
+df1, df2, df3, df4 = (pd.DataFrame(rng.rand(nrows, ncols))
+                      for i in range(4))
+
+pd.eval('df1+df2+df3+df4')
+```
+
+## pandas.query()获取数据
+
+```python
+df.query(expr，inplace = False) 
+eg: df[(df['a']>10) & (df['b']<20) ] 和 df.query(' a >10 and b <20') 等价
+```
+
+# 输出Excel
+
+```python
+with pd.ExcelWriter('path + excel_name') as writer:
+    data1.to_excel(writer, sheet_name='', index=False)
+    data2.to_excel(writer, sheet_name='', index=False)
+```
+
+# Pandas.apply
+
+## 遍历DataFrame的元素
+
+`dataframe.apply(function, axis)` 对一行或一列做出一些操作(`axis=1` 遍历行，`axis=0`遍历列)
+
+```python
+df1 = pd.DataFrame([[3,5],[4,8]], columns=list('AB'))
+df1
+```
+
+```
+A	B
+0	3	5
+1	4	8
+```
+
+```python
+# 对行进行遍历
+df1.apply(np.sum, axis=1)
+
+'''
+0     8
+1    12
+'''
+
+# 默认对列进行遍历
+df1.apply(np.sum)
+'''
+A     7
+B    13
+'''
+```
+
+## 遍历Series的元素
+
+```python
+df1['C'] = df1['A'].apply(lambda x: 111 if x<=3 else 900)
+df1
+
+'''
+     A	B	C
+0	3	5	111
+1	4	8	900
+'''
+```
+
+## 使用lambda表达式
+
+第一种可以使用自定义函数
+
+```python
+# 关于多个if：
+df1['D'] = df1['A'].apply(lambda x: 1 if x<2 else (2 if x<4 else 3 ))
+df1
+
+#自定义函数
+def f(x):
+    if x<2:
+        return 1
+    elif x<4:
+        return 2
+    else:
+        return 3
+
+df1['E'] = df1['A'].apply(lambda x: f(x))
+df1
+
+'''
+    A	B	C	D	E
+0	3	5	111	2	2
+1	4	8	900	3	3
+'''
+```
+
+如果要对多列进行处理：
+
+```python
+'''
+L为语言，如果语言不为空就用该语言，L为空，则根据所属地来判断语言
+'''
+def f(x):
+    if x['L'] !='Nan' :
+        return x['L']
+    else:
+        if x['R'] == '美国':
+            return ('英语')
+        else:
+            return (str(x['R'])+ '语')
+
+df['语言1'] = df.apply(lambda x: f(x),axis=1) #这个地方加上axis=1 表示横向处理
+df
+```
 
 
 

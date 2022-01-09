@@ -9,19 +9,25 @@ tag: Python
 # 一、logging的对象
 
  - Logger: 写日志
+
  - Handler: 将log发送handler指定的位置：控制台或者文件夹
+
  - Filter：对日志进行过滤
+
  - Formatter: 日志的格式
- ```python
+
+   
+```python
 import logging
+
 '''
 logging 模块的四个组成部分：
 1.looger : 写日志
 2.handler ： 让日志在工作台或者文件夹中显示
 3.filter： 对日志进行过滤
 4.formatter： 日志的格式
-
 '''
+
 
 def log():
 
@@ -65,5 +71,5 @@ if __name__ == '__main__':
 
     logger.info('done')
  
- ```
+```
 

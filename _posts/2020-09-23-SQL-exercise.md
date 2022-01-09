@@ -969,3 +969,243 @@ select *,
 
 这个方法还是很好用的~
 
+# 十六、腾讯
+
+- 版本号信息存储在数据表中，每行一个版本号。版本号命名规则如下：
+- 产品版本号由三个部分组成如：v9.11.2
+- 第一部分9为主版本号，为1-99之间的数字；
+- 第二部分11为子版本号，为0-99之间的数字；
+- 第三部分2为阶段版本号，为0-99之间的数字（可选）；已知T1116表有若干个版本号：
+
+```sql
+create table if not exists test.t1116(
+version_id string);
+
+insert into test.t1116 values
+('v9.9.2'),
+('v8.1'),
+('v9.92'),
+('v9.9.2'),
+('v31.0.1'),
+('v31.0.1'),
+('v8.2.1'),
+('v9.99.1'),
+('v9.1.99');
+```
+
+1.需求A：找出T1表中最大的版本号。
+2.需求B：计算出如下格式的所有版本号排序，要求对于相同的版本号，顺序号并列：
+
+想讲几个知识点：
+
+```
+1.split函数
+split(version_id, '\\.') 可以生成['v9','9','2'] 可以使用索引比如：
+split(version_id, '\\.')[0] -> 'v9'
+注意：因为 . 属于特殊字符所以需要 \\ 转置
+
+2.substr函数 
+substr('12345678',1,4) -> '1234'
+substr('12345678',1) -> '12345678'
+substr(str,begin_num,[stop_num]) 如果没有stop_num 就会截取后面的字符
+
+3.casth函数
+cast(str as int)
+```
+
+```sql
+with t as (
+select cast(substr(split(version_id, '\\.')[0],2) as int) as fist_version,
+	   cast(split(version_id, '\\.')[1] as int) as second_version,
+	   cast(split(version_id, '\\.')[2] as int) as third_version,
+	   version_id
+from test.t1116)
+
+select version_id,
+rank() over(order by first_version desc, second_version desc, third_version desc)
+from t;
+
+```
+
+# 十七、连续增长
+
+假设我们有一张订单表test.test1202 `shop_id,order_id,order_time,order_amt` 我们需要计算过去至少连续3天销售金额连续增长的商户`shop_id`。数据如下：
+
+```sql
+create table if not exists test.test1202
+(
+    shop_id    int,
+    order_amt  int,
+    order_time string
+);
+
+insert into test.test1202 values
+(1,100,'2021-05-10 10:03:54'),
+(1,101,'2021-05-10 10:04:54'),
+(1,300,'2021-05-11 10:04:54'),
+(1,300,'2021-05-12 10:04:54'),
+(2,100,'2021-05-10 10:03:54'),
+(2,101,'2021-05-10 10:04:54'),
+(2,208,'2021-05-11 10:04:54'),
+(2,300,'2021-05-12 10:04:54'),
+(3,100,'2021-05-10 10:03:54'),
+(3,101,'2021-05-10 10:04:54'),
+(3,300,'2021-05-11 10:04:54'),
+(3,300,'2021-05-13 10:04:54'),
+(4,100,'2021-05-10 10:04:54'),
+(4,200,'2021-05-11 10:04:54'),
+(4,100,'2021-05-12 10:04:54'),
+(4,300,'2021-05-13 10:04:54');
+```
+
+问题是：至少连续3天金额增长的店铺。
+
+这个问题有两个连续，时间和金额的连续增长：
+
+```sql
+with drop_duplication as (
+select shop_id, to_date(order_time) order_time, sum(order_amt) order_amt
+from test.test1202
+group by shop_id,to_date(order_time)
+),
+
+t1 as (
+select shop_id,
+       order_time,
+       order_amt,
+       order_amt - lag(order_amt,1,order_amt) over(partition by shop_id order by order_time) as diff_order_amt, --判断order_amt连续
+        datediff(order_time,lag(order_time,1,date_sub(order_time,1)) over(partition by shop_id order by order_time)) as diff_order_time --判断order_time连续
+from drop_duplication
+),
+
+t2 as (
+select *,
+     sum(if(diff_order_time>1,1,0)) over(partition by shop_id order by order_time) as flag_1
+from t1 
+),
+
+t3 as (
+select *,
+    sum(if(diff_order_amt<=0,1,0)) over(partition by shop_id,flag_1 order by order_time ) as flag_2
+    from t2 
+)
+
+select shop_id
+from t3
+group by shop_id,flag_1,flag_2;
+```
+
+# 十八、分时间段、区间统计
+
+有一批交易数据，并希望每5秒中汇总一下这些数据。test.t1216数据如下：
+
+```sql
+reate table if not exists test.t1216
+(
+     trx_id int,
+        trx_date string,
+        trx_cnt int
+);
+
+insert into test.t1216 values
+(1,'2005-07-28 19:03:07',44),
+(2,'2005-07-28 19:03:08',18),
+(3,'2005-07-28 19:03:09',23),
+(4,'2005-07-28 19:03:10',29),
+(5,'2005-07-28 19:03:11',27),
+(6,'2005-07-28 19:03:12',45),
+(7,'2005-07-28 19:03:13',45),
+(8,'2005-07-28 19:03:14',32),
+(9,'2005-07-28 19:03:15',41),
+(10,'2005-07-28 19:03:16',15),
+(11,'2005-07-28 19:03:17',24),
+(12,'2005-07-28 19:03:18',47),
+(13,'2005-07-28 19:03:19',37),
+(14,'2005-07-28 19:03:20',48),
+(15,'2005-07-28 19:03:21',46),
+(16,'2005-07-28 19:03:22',44),
+(17,'2005-07-28 19:03:23',36),
+(18,'2005-07-28 19:03:24',41),
+(19,'2005-07-28 19:03:25',33),
+(20,'2005-07-28 19:03:26',19);
+```
+
+希望得到：
+
+```
+grp	   trx_start	       trx_end	      total
+1	2005-07-28 19:03:07	2005-07-28 19:03:11	141
+2	2005-07-28 19:03:12	2005-07-28 19:03:16	178
+3	2005-07-28 19:03:17	2005-07-28 19:03:21	202
+4	2005-07-28 19:03:22	2005-07-28 19:03:26	173
+```
+
+```sql
+with t1 as (
+    select  trx_id
+            ,trx_date
+            ,trx_cnt
+            ,first_value(trx_date) over(order by trx_date ) as first_time
+            ,floor((unix_timestamp(trx_date)-unix_timestamp(first_value(trx_date) over(order by trx_date )))/5) as flag
+    from test.t1216
+
+)
+select flag,
+       min(trx_date) as trx_start,
+       max(trx_date) as trx_end,
+       sum(trx_cnt) as total
+from t1
+group by 1;
+```
+
+# 十九、存在性问题
+
+业务中涉及到学生退费的统计问题，求截止当前月退费总人数，退费人数：上月存在，当月不存在。
+
+```sql
+create table if not exists test.stu
+(
+    day string , --'日期'
+    stu_id int -- '学生id' 
+);
+
+insert into stu values 
+("2020-01-02", 1001),
+("2020-01-02", 1002),
+("2020-02-02", 1001),
+("2020-02-02", 1002),
+("2020-02-02", 1003),
+("2020-02-02", 1004),
+("2020-03-02", 1001),
+("2020-03-02", 1002),
+("2020-04-02", 1005),
+("2020-05-02", 1006);
+
+-- 1.先使用collect_list()将stu_id按照每个月进行合并
+-- 2.使用lead()over()开窗函数
+-- 3.利用array_contains()函数判断当前stu_id是否在下一个月array中出现
+
+with t1 as (
+	select substr(day,1,7) as 'mth',
+    	   collect_list(stu_id) as 'stu_id_arr'
+    from test.stu
+    group by 1
+),
+	t2 as (
+    select mth,
+           lead(stu_id_arr) over(order by mth) as next_stu_id_arr
+    from t1 
+),
+	t3 as (
+    select t2.mth, a.stu_id, t2.next_stu_id_arr
+    from test.stu a
+    left join t2 on substr(day,1,7) = t2.mth
+)
+     select mth,
+        	stu_id,
+        	if(!array_contains(next_stu_id_array, stu_id),1,0) as flag
+     from t3 ;
+ -- 上面的逻辑可以用来判断上月存在，当月不存在的用户。
+
+```
+
