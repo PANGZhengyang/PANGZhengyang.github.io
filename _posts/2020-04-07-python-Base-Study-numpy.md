@@ -178,21 +178,29 @@ arr4.T
 ```
 
 矩阵不满足乘法交换律 A B 是矩阵
+
 $$
 A \times B \neq B \times A
 $$
+
 矩阵满足结合律A B C 是矩阵
+
 $$
 A \times( B \times C) = (A \times B) \times C
 $$
+
 单位矩阵(Identity Matrix) : `np.eye()` 
+
 $$
 A \times I = I \times A = A
 $$
+
 矩阵的逆(Matrix inverse) `np.linalg.inv()`：numpy 中有线性代数(linear algebra - linalg)
+
 $$
 A(A^{-1}) = A^{-1}A = I
 $$
+
 矩阵转置(Matrix transpose) `arr.T`
 
 
