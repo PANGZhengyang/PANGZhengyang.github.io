@@ -16,27 +16,33 @@ katex: true
 ## L-P范数
 
 向量范数的通用公式为L-P范数
+
 $$
 Lp=\sqrt[p]{\sum_1^n x_i^p}，x=(x_1,x_2, \cdots,x_n)
 $$
+
 演化成各类范数：
 
 - L0范数：非0个数
+  
   $$
   ||x||=\sqrt[0]{\sum_1^n x_i^0}，x=(x_1,x_2,\cdots,x_n)
   $$
   
 - L1范数：x与0之间的曼哈顿距离，每个元素绝对值之和
+  
   $$
   ||x||_1=\sum_i|x_i|，x=(x_1,x_2,\cdots,x_n)
   $$
   
 - L2范数：x与0质检的欧式距离，每个元素平方之和再开方
+   
    $$
    ||x||_2=\sqrt {\sum x_i^2}
    $$
    
 - L$\infty$ 范数:度量向量元素的最大值
+   
    $$
    ||x||_\infty=\sqrt[\infty]{\sum_1^n x_i^\infty}，x=(x_1,x_2,\cdots,x_n) \\
    ||x||_\infty=max(|x_i|)
@@ -55,9 +61,11 @@ $$
 - variance描述的是模型在**测试集**上的表现，low variance --- 简化模型，减少参数，但容易造成欠拟合 high bias；
 
 综上，bias和variance的选择是一个权衡问题。误差是我们需要关注的，由下面公式表示：
+
 $$
 Error = Bias + Variance
 $$
+
 随着模型的复杂度上升，预测误差的表现如下：
 
 ![2020-07-21-ML-overfit-regularization-2](/assets/machine learning/2020-07-21-ML-overfit-regularization-2.png)
@@ -76,45 +84,59 @@ Bias & Variance 总结
 ## 正则化
 
 正则化技术其实就是在损失函数中加入罚项，从而降低参数的大小，控制模型复杂度，从而防止过拟合。表现形式：
+
 $$
 J(w;x,y) + \alpha \Omega(w) \\
 J(w;x,y) - 损失函数 \ ； w-为参数 \\
 \alpha :constant - 控制正则化强度 \\
 \Omega-惩罚项，通常是L1或L2范数
 $$
+
 L1正则化：
+
 $$
 F(w;x,y) = J(w;x,y) + \alpha ||w||_1
 $$
+
 L2正则化：
+
 $$
 F(w;x,y) = J(w;x,y) + \alpha ||w||_2
 $$
+
 为什么正则化可以防止过拟合？
 
 当模型的复杂度上升意味着`w`参数较多，从而造成过拟合
 
 如果我们适当减少`w`数量，增加bias 减少variance 换泛化程度；所以让$w=(w_1,w_2,\cdots,w_n)^T$中某些$w_i$为0，某些不为0.由于使用L0范数（不是一个凸优化问题）不能求解，所以转换为L1或者L2正则化问题，让w中某些参数尽可能接近0,以L1正则为例可以得到：
+
 $$
 |w_1|+|w_2|+\cdots+|w_n| \leq C
 $$
+
 这就转化成一个优化问题：
+
 $$
 \begin{cases} 
 min J(w;x,y) \\
 s.t. ||w||_1 \leq C
 \end{cases}
 $$
+
 构造拉格朗日函数：
+
 $$
 L(w,a) = J(w;x,y)+a(||w||_1-C)
 $$
+
 对其求导，假设$w',a'$为最优解：
+
 $$
 L'(w,a) = 0 \Rightarrow min \ J(w';x,y)+ min \ a(||w'||_1-C) \\
 \Rightarrow min_w J(w;x,y)+ a'||w||_1-a'C \\
 正比于 min_w J(w;x,y)+ a'||w||_1
 $$
+
 该式子就是L1正则化，从而只要求出L1正则化最小值，就能防止过拟合。
 
 并且L1能够得到稀疏解，话句话说，L1能使较多参数为0，可以做特征选择的原因：
