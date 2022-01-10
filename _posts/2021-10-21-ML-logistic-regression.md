@@ -65,3 +65,66 @@ Logistic regression的cost function 不是定义出来的，而是通过**极大
 
 极大似然估计就是**通过已知的结果去反推最大概率可能得到这个结果的参数**。它提供了一种给定观察数据来评估模型参数的方法。Lg是一种监督式学习，是有训练标签的，就是有已知结果的，从这个已知结果入手，去推导能获得最大概率的结果参数，只要我们得出了这个参数，那我们的模型就自然可以很准确的预测未知的数据了。
 
+令Lg模型为$h_{\theta}(x)$，将其视为类1的后验概率：
+
+$$
+P(Y=1 | x,\theta) = \frac{1}{1+e^{-\theta^T x}} \\
+P(Y=0 | x,\theta) = \frac{e^{-\theta^T x}}{1+e^{-\theta^T x}}
+$$
+
+上面的式子可以改写为一般形式：
+$$
+P(Y|x,\theta) = h_{\theta}(x)^Y (1-h_{\theta}(x))^{1-Y}
+$$
+
+根据极大似然估计，可以得到：
+
+$$
+J(\theta) = \prod_i^m P(y^{(i)}|x^{(i)},\theta) = h_{\theta}(x^{(i)})^{Y^{(i)}} (1-h_{\theta}(x^{(i)}))^{{(1-Y)}^{(i)}}
+$$
+
+为了简化计算，取对数得到：
+
+$$
+\log(J(\theta)) = \sum_{i=1}^{m} y^{(i)} \log({h_{\theta}(x^{(i)})}) + (1-y^{(i)}) \log(1-{h_{\theta}(x^{(i)})})
+$$
+
+我们希望极大似然越大越好，就是说，对于给定样本数量m，希望$-\frac{1}{m} J(\theta)$ 最小，所以Lg的Cost function：
+
+$$
+J(\theta) = -\frac{1}{m} [\sum_{i=1}^{m} y^{(i)} \log({h_{\theta}(x^{(i)})}) + (1-y^{(i)}) \log(1-{h_{\theta}(x^{(i)})})]
+$$
+
+## Python实现
+
+首先是`Sigmoid function` 使用`scipy`包中的函数：
+
+```python
+from scipy.special import expit
+expit()
+#给出了 y=1 的概率值
+```
+
+Logistic regression 可以直接从`sklearn`中调取：
+
+```python
+from sklearn.linear_model import LogisticRegression
+lg_clf = LogisticRegression()
+lg_clf.fit(X, y)
+lg_clf.predict(X_test)
+lg_clf.predict_proba(X_test)
+```
+
+常用属性：
+(1) coef_ : 以数组形式返回假设函数中特征的系数
+(2) intercept_ : 以数组形式返回假设函数的截距
+
+常用方法：
+(1) fit(X, y) : 对给定训练数据拟定模型
+(2) predict(X) : 预测x中样本的类标签
+(3) predict_proba(X) : 给出估计概率
+
+
+
+
+
