@@ -12,6 +12,7 @@ katex: true
 在一元函数的情况下，导数就是函数的变化率，且只存在一个方向的变化率，从几何意义上看：就是某一点切线的斜率。
 
 基本求导公式如下：[点击查看更多](https://blog.csdn.net/xueruixuan/article/details/78780105?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522163754972316780271963384%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=163754972316780271963384&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-78780105.first_rank_v2_pc_rank_v29&utm_term=%E5%AF%BC%E6%95%B0%E5%85%AC%E5%BC%8F&spm=1018.2226.3001.4187)
+
 $$
 (C)' = 0 \\
 (x^u)' = ux^{u-1} \\
@@ -19,7 +20,9 @@ $$
 (\ln(x))' = \frac{1}{x} \\
 (\log_ax)' = \frac{1}{x\ln(a)}
 $$
+
 基本求导法则如下：设 $u = u(x), \ v = v(x)$都可导
+
 $$
 (u \pm v)' = u' \pm v' \\
 (Cu)' = Cu' \\
@@ -59,14 +62,19 @@ $$
 - 前面横向拉，后面纵向拉
 
 几个常见矩阵求导公式：
+
 $$
 \frac{dA^TX}{dX} = A
 $$
+
 推导：A,X均为列向量 $A = [a_1,a_2,\cdots , a_n]^T$以及$X=[x_1,x_2,\cdots,x_n]^T$
+
 $$
 f(X) = A^TX = \sum_i^na_ix_i
 $$
+
 f(x)为标量不变，x为向量拉伸：后面纵向拉伸
+
 $$
 \frac{df(X)}{dX}= 
 \begin{bmatrix}\frac{\partial f(X)}{\partial x_1}\\
@@ -81,7 +89,9 @@ a_n
 \end{bmatrix}
 =A
 $$
+
 第二个比较重要的是：
+
 $$
 \frac{dX^TAX}{dX} = AX+A^TX
 $$
