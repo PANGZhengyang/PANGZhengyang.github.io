@@ -68,8 +68,8 @@ Logistic regression的cost function 不是定义出来的，而是通过**极大
 令Lg模型为$h_{\theta}(x)$，将其视为类1的后验概率：
 
 $$
-P(Y=1 | x,\theta) = \frac{1}{1+e^{-\theta^T x}} \\
-P(Y=0 | x,\theta) = \frac{e^{-\theta^T x}}{1+e^{-\theta^T x}}
+P(Y=1 | x,\theta) = \frac{1} { 1+e^{-\theta^T x} } \\
+P(Y=0 | x,\theta) = \frac{ e^{-\theta^T x} } { 1+e^{-\theta^T x} }
 $$
 
 上面的式子可以改写为一般形式：
@@ -80,19 +80,19 @@ $$
 根据极大似然估计，可以得到：
 
 $$
-J(\theta) = \prod_i^m P(y^{(i)}|x^{(i)},\theta) = h_{\theta}(x^{(i)})^{Y^{(i)}} (1-h_{\theta}(x^{(i)}))^{{(1-Y)}^{(i)}}
+J(\theta) = \prod_i^m P(y^{(i)} | x^{(i)}, \theta) = h_\theta (x^{(i)})^Y (1-h_{\theta}(x^{(i)}))^{(1-Y)}
 $$
 
 为了简化计算，取对数得到：
 
 $$
-\log(J(\theta)) = \sum_{i=1}^{m} y^{(i)} \log({h_{\theta}(x^{(i)})}) + (1-y^{(i)}) \log(1-{h_{\theta}(x^{(i)})})
+\log(J(\theta)) = \sum_{i=1}^{m} y^{(i)} \log({h_\theta (x^{(i)})}) + (1-y^{(i)}) \log(1-{h_\theta (x^{(i)}) })
 $$
 
 我们希望极大似然越大越好，就是说，对于给定样本数量m，希望$-\frac{1}{m} J(\theta)$ 最小，所以Lg的Cost function：
 
 $$
-J(\theta) = -\frac{1}{m} [\sum_{i=1}^{m} y^{(i)} \log({h_{\theta}(x^{(i)})}) + (1-y^{(i)}) \log(1-{h_{\theta}(x^{(i)})})]
+J(\theta) = -\frac{1}{m} [\sum_{i=1}^{m} y^{(i)} \log({h_\theta (x^{(i)})}) + (1-y^{(i)}) \log(1- {h_\theta (x^{(i)})} )]
 $$
 
 ## Python实现
