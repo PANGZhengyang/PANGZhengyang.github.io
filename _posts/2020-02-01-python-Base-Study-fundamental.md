@@ -14,8 +14,8 @@ Let's start!
 
 <div class="mermaid">
 graph LR
-    id1(ASCII-美国)
-    id2(GBK-中国)
+    id1(ASCII美国)
+    id2(GBK中国)
     id3(Shift_JIS日本)
     id4(统一为Unicode)
     id5(考虑到节约资源问题":"UTF-8)
