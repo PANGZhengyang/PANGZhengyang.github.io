@@ -16,9 +16,9 @@ Let's start!
 graph LR
     id1(ASCII-美国)
     id2(GBK-中国)
-    id3(Shift_JIS-日本)
+    id3(Shift_JIS日本)
     id4(统一为Unicode)
-    id5(考虑到节约资源问题：UTF-8)
+    id5(考虑到节约资源问题":"UTF-8)
     id1 --> id4 
     id2 --> id4 
     id3 --> id4

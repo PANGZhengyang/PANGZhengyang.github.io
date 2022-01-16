@@ -72,6 +72,8 @@ axis=0 : 竖向链接
 ignore_index=True ：重新建索引
 join='inner' ：两个df2 都有的列名
 join_axes=['A','B'] :合并A,B列
+
+两个Series的合并也可以使用concat
 '''
 
 pd.merge(right, left, how='inner', on=None, left_on=None, right_on=None, left_index=None, right_index=None)
@@ -819,13 +821,15 @@ with pd.ExcelWriter('path + excel_name') as writer:
 
 `dataframe.apply(function, axis)` 对一行或一列做出一些操作(`axis=1` 遍历行，`axis=0`遍历列)
 
+注意：是逐行逐列应用该函数
+
 ```python
 df1 = pd.DataFrame([[3,5],[4,8]], columns=list('AB'))
 df1
 ```
 
 ```
-A	B
+    A	B
 0	3	5
 1	4	8
 ```
@@ -905,6 +909,35 @@ def f(x):
 
 df['语言1'] = df.apply(lambda x: f(x),axis=1) #这个地方加上axis=1 表示横向处理
 df
+```
+
+# Pandas.applymap
+
+`dataframe.applymap(function)` 对pandas对象**逐元素**应用某个函数，成为元素级函数应用：
+
+`applymap` 与`map` 的区别：
+
+- `applymap()` 是Dataframe的实例方法
+- `map()` 是Series的实例方法
+
+```python
+df.applymap(lambda x: '%.2f'%x) # dataframe
+df['某列'].map(lambda x: '%.2f'%x) # series
+```
+
+# EDA
+
+```python
+import pandas_profiling
+
+pandas_profiling.ProfileReport(df)
+```
+
+```python
+import sweetviz as sv
+
+report = sv.analyze(df)
+report.show_html()
 ```
 
 
