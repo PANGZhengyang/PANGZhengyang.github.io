@@ -30,6 +30,8 @@ mermaid: true
 
 2. `Alt +shift`
 
+3. `Alt + shift + E` :执行部分代码 相当于 Execute Selection in Python Concole
+
    
 
    

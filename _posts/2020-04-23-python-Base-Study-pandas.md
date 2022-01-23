@@ -694,16 +694,96 @@ pd.cut(x, bins, right=True, labels=[])
 # 等频切分 quantile,每个bin里面的数据量相等
 pd.qcut(x, q, labels=[])
 ```
+# 删除数据
+
+## 删除行
+
+```python
+df.drop([0,1,2]) #删除第1,2,3行，默认axis=0
+```
+
+## 删除列
+
+```python
+df.drop('name', axis=1) #删除name列，axis=1为列
+```
 
 # Groupby 与窗口函数
+
+```python
+df = pd.DataFrame({'Country':['China','China', 'India', 'India', 'America', 'Japan', 'China', 'India'],
+                   'Income':[10000, 10000, 5000, 5002, 40000, 50000, 8000, 5000],
+                    'Age':[5000, 4321, 1234, 4010, 250, 250, 4500, 4321]})
+print(df)
+
+'''
+   Country  Income   Age
+0    China   10000  5000
+1    China   10000  4321
+2    India    5000  1234
+3    India    5002  4010
+4  America   40000   250
+5    Japan   50000   250
+6    China    8000  4500
+7    India    5000  4321
+'''
+
+# groups可以得到类别，属于类别的index
+df.groupby('Country').groups
+
+# {'America': [4], 'China': [0, 1, 6], 'India': [2, 3, 7], 'Japan': [5]}
+
+# groupby之后得到的是一个可迭代对象
+for index, data in df.groupby('Country'):
+    print(index)
+    print(data)
+  
+'''
+America
+   Country  Income  Age
+4  America   40000  250
+China
+  Country  Income   Age
+0   China   10000  5000
+1   China   10000  4321
+6   China    8000  4500
+India
+  Country  Income   Age
+2   India    5000  1234
+3   India    5002  4010
+7   India    5000  4321
+Japan
+  Country  Income  Age
+5   Japan   50000  250
+'''
+
+# 通过 get_group() 获取的想要的组
+df.groupby('Country').get_group('China')
+```
 
 ````python
 ```
 groupby() 	 --> aggreate({'A':np.sum,'B':np.median}) / aggreate([np.sum, np.median])
 			--> fliter(函数)
-			--> transform(函数)
+			--> transform(函数) 对groupby后的dataframe中的每个数据进行func运算，返回运算后的dataframe
 			--> apply(函数)
 ```
+# .transform
+# 例如在china这个组里面发现最大值，然后China这个组每一行都记嘉善过这个值
+df['transform_income'] = df.groupby('Country')['Income'].transform(np.max)
+
+'''
+   Country	Income	 Age	transform_income
+0	China	10000	5000	10000
+1	China	10000	4321	10000
+2	India	5000	1234	5002
+3	India	5002	4010	5002
+4	America	40000	250	    40000
+5	Japan	50000	250	    50000
+6	China	8000	4500	10000
+7	India	5000	4321	5002
+'''
+
 # pandas 实现hive 窗口函数
 df = pd.DataFrame({'age':[12,20,12,5,18,11,18],
                    'name':['A','B','A','B','B','A','A']})
@@ -783,7 +863,7 @@ asfreq('5D') #最后一天的值
 #降采样比如天变成月：这个时候可以取累计，也可以取第一条或最后一条
 ```
 
-
+![2020-04-23-python-Base-Study-pandas-1](/assets/python notes/pandas/2020-04-23-python-Base-Study-pandas-1.png)
 
 # 高性能Pandas
 
