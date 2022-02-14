@@ -71,7 +71,7 @@ d1
 
 - 必选参数
 
-- 默认参数：必须写在必须参数后面，且应该使用不可变对象
+- 默认参数：必须写在必选参数后面，且应该使用不可变对象
 
 - 可变参数：`*args` 传递不定数量的参数
 
@@ -331,6 +331,7 @@ q = deque([1,2,3,4,'a'])
 q.append('s') # deque([1,2,3,4,'a','s'])
 q.appendleft('d') # deque(['d',1,2,3,4,'a','s'])
 q.rotate() #翻转
+q.reverse() #反转
 ```
 
 ### datetime
@@ -377,4 +378,27 @@ hashlib.sha256('test'.encode('utf-8')).digest().hex()
 
 
 ```
+
+##  None、NaN、Null
+
+- None
+
+  在Python中 None 是一个特殊的数据类型，不同于空列表和空字符串，是一种单独的格式。
+
+- NaN
+
+  NaN 是 numpy和pandas里面的 Not a Number的简称
+
+  ```python
+  from numpy import NaN
+  type(NaN)
+  
+  # out: float
+  ```
+  对整体的series或Dataframe判断是否未空，用isnull()
+  对单独的某个值判断，可以用 np.isnan()
+  
+- Null
+
+  在Python中没有Null，NULL主要在C语言中，在Python中对应为None
 

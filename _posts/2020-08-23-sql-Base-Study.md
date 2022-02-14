@@ -314,6 +314,8 @@ select replace('s d f',' ','');
 
 `substr(str,start,end)`
 
+如果end=1，则截取start一个字符
+
 #### 4.1.4.5 explode in hive
 
 `explode`的作用是处理map，array字段类型
@@ -462,6 +464,33 @@ from t ;
 ### 4.1.4.11 size （Hive）
 
 array的大小
+
+```sql
+select size(array('a','b','c','d')) ;
+# 结果：4
+```
+
+### 4.1.4.12 space （Hive）
+
+生成指定长度的空格
+
+#### 4.1.4.13 posexplode （Hive）
+
+对数组结构的数据进行行转列，并为其生成对应索引
+
+```sql
+select posexplode(split('a,b,c,d,e,f',','))
+
+/*
+pos val
+0    a
+1    b
+2    c
+...
+*/
+```
+
+
 
 ## 4.2 汇总函数 Aggregate Functions
 

@@ -662,6 +662,9 @@ df[df.isnull().T.any()==True]
 
 ```python
 df.dropna()
+
+# 删除某列中含有缺失值的所在行
+ddf.dropna(subset=['age'])
 ```
 
 4）填充：
@@ -671,7 +674,7 @@ df.dropna()
 df['xxx'].fillna(df['xxx'].mean())
 
 #用插值法填充：缺失值的上下均值填充
-df['xxx'] = df['xxx'].interpolate()
+df['xxx'] = df['xxx'].fillna(df['xxx'].interpolate())
 
 ```
 
@@ -769,7 +772,7 @@ groupby() 	 --> aggreate({'A':np.sum,'B':np.median}) / aggreate([np.sum, np.medi
 			--> apply(函数)
 ```
 # .transform
-# 例如在china这个组里面发现最大值，然后China这个组每一行都记嘉善过这个值
+# 例如在china这个组里面发现最大值，然后China这个组每一行都记录这个值
 df['transform_income'] = df.groupby('Country')['Income'].transform(np.max)
 
 '''

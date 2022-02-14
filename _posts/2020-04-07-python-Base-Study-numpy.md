@@ -27,7 +27,7 @@ np.eye((2,2)) # 对角线为1
 np.linspace(0,1,5) # 创建一个5个元素的数组，把5个数均匀分配到0~1
 np.random.randint(1,10,(2,2)) # 2×2的[1,10)
 np.random.normal(loc, scale, size) # 正态分布，默认标准正态分布
-np.random,randn((2,2)) # 2×2 标准正态分布
+np.random.randn((2,2)) # 2×2 标准正态分布
 np.random.random(size) # [0.0, 1.0)
 ```
 
