@@ -490,6 +490,18 @@ pos val
 */
 ```
 
+#### 4.1.4.14 translate 
+
+```sql
+/* 
+translate(input, from, to): from和to中的字符是一一对应的，tanslate针对单一字符进行替换
+而 replace是对整体串上的替换
+*/
+
+select translate('ABCDEFGADC','ABC','123'); # 123DEFG1D3  A对应1 B对应2 C对应3
+select replace('ABCDEFGADC','ABC','123'); # 123DEFGADC  ABC 对应
+```
+
 
 
 ## 4.2 汇总函数 Aggregate Functions

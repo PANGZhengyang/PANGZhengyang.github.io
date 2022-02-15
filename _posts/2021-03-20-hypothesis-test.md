@@ -97,16 +97,16 @@ $$
 
 $\overline p$的期望值等于假设值$p_0$
 
-
 $$
-E(\overline p) = p_0 \\
-\sigma_\overline p = \sqrt \frac {p_0(1-p_0)}{n}
+E(\overline p) = p_0 
+\\
+\sigma_\overline p = \sqrt {\frac {p_0(1-p_0)}{n}}
 $$
 
 因为$np \geq 5$并且$n(1-p) \geq5$则$\overline p$的抽样分布近似服从正态分布，所以有：
 
 $$
-z = \frac {p-p_0}{\sigma_\overline p}= \frac{p-p_0}{\sqrt \frac {p_0(1-p_0)}{n}}
+z = \frac {p-p_0}{\sigma_\overline p}= \frac{p-p_0}{\sqrt {\frac {p_0(1-p_0)}{n}}
 $$
 
 
