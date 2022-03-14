@@ -440,7 +440,7 @@ a  b  ["1","2","3"]
 c  d  ["4","5",]
 ```
 
-### 4.1.4.10 arrary_contains （Hive）
+#### 4.1.4.10 arrary_contains （Hive）
 
 ```sql
 -- array()：返回数组
@@ -461,7 +461,7 @@ select array_contains(a,pay_amount) as test
 from t ;
 ```
 
-### 4.1.4.11 size （Hive）
+#### 4.1.4.11 size （Hive）
 
 array的大小
 
@@ -470,7 +470,7 @@ select size(array('a','b','c','d')) ;
 # 结果：4
 ```
 
-### 4.1.4.12 space （Hive）
+#### 4.1.4.12 space （Hive）
 
 生成指定长度的空格
 
@@ -501,6 +501,20 @@ translate(input, from, to): from和to中的字符是一一对应的，tanslate�
 select translate('ABCDEFGADC','ABC','123'); # 123DEFG1D3  A对应1 B对应2 C对应3
 select replace('ABCDEFGADC','ABC','123'); # 123DEFGADC  ABC 对应
 ```
+
+#### 4.1.4.14 repeat
+
+```sql
+select repeat('z',5);
+# z
+```
+
+#### 4.1.4.15 locate (hive)
+
+```sql
+# locate(substr, str , loc) 返回字符串 substr 在 str 中从 pos 后查找,首次出现的位置
+```
+
 
 
 

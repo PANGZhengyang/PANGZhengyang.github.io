@@ -178,9 +178,9 @@ lateral view explode(tep_column) a as bool,value;
 ```
 id   bool  value
 1      yes   21
-1       no   89
-2       yes  11
-2       yes  65
+1      no0   89
+2      yes   11
+2      noo   65
 ```
 
 有些时候想实现行转列的的需要，如下test表
@@ -1010,7 +1010,7 @@ substr('12345678',1,4) -> '1234'
 substr('12345678',1) -> '12345678'
 substr(str,begin_num,[stop_num]) 如果没有stop_num 就会截取后面的字符
 
-3.casth函数
+3.cast函数
 cast(str as int)
 ```
 
