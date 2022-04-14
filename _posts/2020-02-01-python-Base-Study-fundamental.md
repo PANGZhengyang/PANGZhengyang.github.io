@@ -12,18 +12,157 @@ Let's start!
 
 ## 编码
 
-<div class="mermaid">
-graph LR
-    id1(ASCII美国)
-    id2(GBK中国)
-    id3(Shift_JIS日本)
-    id4(统一为Unicode)
-    id5(考虑到节约资源问题":"UTF-8)
-    id1 --> id4 
-    id2 --> id4 
-    id3 --> id4
-    id4 --> id5
-</div>
+ASCII美国 + GBK中国 + Shift_JIS日本 ——> 统一为Unicode ——> 考虑到节约资源问题:UTF-8
+
+## 数据结构
+
+对于常用的数据类型，从创建、添加、删除、获取、常用函数等方面整理
+
+### 列表List
+
+```python
+# 创建
+list()
+[]
+[i for i in range(10)]
+
+# 添加
+.append() # 最后插入
+.extend() # 若 list1.extend(list2), list2 中的每个元素会插入到list1中
+.insert() # 指定位置插入
+
+# 删除
+lst.remove(2) # 若列表中，有重复元素，则删除列表中，首次出现的该元素。若删除元素不存在，则抛出异常。
+lst.pop() # 删除指定位置元素，并返回指定位置元素。若不指定位置，默认删除列表末 尾元素。
+lst.clear() # 删除列表中全部元素
+
+del lst[0] # 删除列表指定位置的元素。
+
+# 获取：单索引、切片
+
+# 列表长度计算
+len(lst)
+
+# 列表元素计数
+lst.count(需要统计元素)
+
+# 列表排序
+.sort(reverse=True) # 原列表
+sorted(lst) # 新列表
+
+# 列表推导式
+# 多个维度多个for循环
+b = [x*y for x in [1,2,3] for y in [4,5,6]] 
+
+#加入if条件
+c = [i for i in range(1,10) if i % 2 ==0]
+#可以加入多个if条件
+d = [i for i in range(100) if i % 2 ==0 if x % 3 ==0]
+
+#加入if-else条件
+e = [i if i % 2 ==0 else i+1 for i in range(100)]
+#等价于
+lst =[]
+for i in range(100):
+    if i %2  ==0:
+        lst.append(i)
+    else:
+        lst.append(i+1)
+```
+
+### 字典 Dict
+
+```python
+# 创建
+{}
+dict(zip(a,b)) # a,b 为list、tuple等
+# 等价于：
+dic = {}
+for k,v in zip(a,b):
+    dic[k] = v
+
+# dict.fromkeys(seq[, value])
+seq = ('name', 'age', 'class')
+values = 1
+dic = dict.fromkeys(seq1,values) #{'name': 1, 'age': 1, 'class': 1}
+
+# 字典推导式
+names = ['Bruce', 'Clark', 'Peter', 'Logan', 'Wade']
+heros = ['Batman', 'Superman', 'Spiderman', 'Wolverine', 'Deadpool']
+
+mydic = {name:hero for name, hero in zip(names,heros)}
+
+# 添加
+'''
+“ 键” 存在，则覆盖原有“ 键值对” 。“ 键” 不存在，新增键值对
+ update：使用 update 把 b 字典的所有‘ 键值对’ 添加到 a 字典中
+'''
+a.update(b) #  若果‘ 键值对重复’ ，直接覆盖；否则，合并。
+
+# 删除
+del dic[key]
+dic.pop(key) # 删除后返回key对应的value
+dic.popitem() # 随机删除和返回键值对 注：字典是无序可变序列，没有第一个元素、最后一个元素的概念
+
+# 获取
+dic.get(key) 
+dic[key] # 如果没有key 则会报错
+dic.items() 
+dic.keys()
+dic.values()
+
+# 排序
+# 因为字典是无序可变序列，没有第一个元素、最后一个元素的概念
+my_dict={"cc":100,"aa":200,"bb":10}
+
+sorted(my_dict.items(),key=lambda x:x[0]) # 按照key排序
+sorted(my_dict.items(),key=lambda x:x[1]) # 按照value排序
+
+# 字典中提取部分子集
+
+# 提取分数超过90分的学生信息，并变成字典
+students_score={'jack':80,'james':91,'leo':100,'sam':60}
+good_score={name:score for name,score in students_score.items() if score>90}
+# 另一种方法：
+dic1 = {}
+for k,v in students_score.items():
+    if v>90:
+        dic1[k] = v
+
+# 字典的翻转
+students_score={'jack':80,'james':91,'leo':100,'sam':60}
+inverse_s = dict[(v,k) for k,v in students_score.items()]
+
+# 字典中找出最大值
+m = {"a":3,"e":6,"b":2,"g":7,"f":7,"c":1,"d":5}
+dic_max = {}
+for k,v in m.items():
+    if v == max(m.values()):
+        dic_max[k] = v
+dic_max
+```
+
+### Series
+
+```python
+# Series可以理解为有顺序的字典（注意：本身字典不存在顺序）key即为index
+pd.Series(dic)
+pd.Series(lst, index=)
+```
+
+### Dataframe
+
+```python
+# Dataframe 是一个二维数组表结构
+#  创建方法一：由数组/list组成的字典,columns为字典key，index为默认数字标签
+data1 = {'a':[1,2,3],
+        'b':[3,4,5],
+        'c':[5,6,7]}
+pd.DataFrame(data1)
+
+```
+
+
 
 ## 切片
 
@@ -152,6 +291,7 @@ d1
     args = (4, 5, 6)
     kwargs = {'a': 1, 'b': 2}
     ```
+
 ## 高阶函数（Higher-order Functions)
 
 一个函数接受另一个函数作为参数。
