@@ -9,7 +9,7 @@ tag: Python
 This is my note for Python for Plotly. When I face some tricky problems, I'll record them.
 Let's start!
 
-想说一下高度封装好的Plotly Express。
+想说一下高度封装好的Plotly Express
 
 ```python
 import pandas as pd
@@ -30,8 +30,8 @@ px.bar(data,x,y,title,template,color_discrete_sequence)
 1.color_discrete_sequence=plotly.colors.colorbrewer.Set1
 
 .update_traces() 更新一下trace的格式
-
 '''
+
 fig = px.bar(qq, x="Category", y=["Predicted", "real", "new_val"], title="Long-Form Input",template="plotly_dark",color_discrete_sequence=['#A21C1C'])
 
 # 在bar图里面再加入line图，同事yaxis='y2'和.update_layout添加second——axis

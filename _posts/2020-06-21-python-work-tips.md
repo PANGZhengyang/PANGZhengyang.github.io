@@ -82,6 +82,13 @@ df = tabula.read_pdf('xxx.pdf',pages=1) # 表示第一页 'all'表示所有
 ### 合并PDF
 
 ```python
+'''
+1导入PyPDF2合并模块PdfFileMerger;
+2读取需要处理和合并的PDF文档；
+3从第一个PDF文档中取出需要合并的前3页；
+4把第二个PDF文档的第一页插入到文档中；
+5把第三个PDF文档附到输出文档末尾；
+'''
 from PyPDF2 import PdfFileMerger #// 1
 
 merger = PdfFileMerger()
@@ -98,20 +105,12 @@ merger.append(input3)# // 5
 
 output = open("document-output.pdf", "wb")
 merger.write(output)
-'''
-1导入PyPDF2合并模块PdfFileMerger;
-2读取需要处理和合并的PDF文档；
-3从第一个PDF文档中取出需要合并的前3页；
-4把第二个PDF文档的第一页插入到文档中；
-5把第三个PDF文档附到输出文档末尾；
-'''
 
 ```
 
 ### 拆分PDF
 
 ```python
-# encoding=utf-8
 from PyPDF2 import PdfFileWriter, PdfFileReader
 
 def pdf_split(pdf_in,pdf_out,start,end):
@@ -131,7 +130,7 @@ if __name__ == '__main__':
     pdf_in = 'BS218_10.pdf'
     pdf_out = 'BS218_10_副本2.pdf'
     s, e = 4, 6  # 拆分的起始位置和结束位置
-    pdf_split(pdf_in, pdf_out, s, e)插入代码片
+    pdf_split(pdf_in, pdf_out, s, e) # 插入代码片
 ```
 
 
