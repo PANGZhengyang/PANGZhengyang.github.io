@@ -86,7 +86,7 @@ $$
 1. 变化不需要条件触发。所有用户被分配到实验组的时候，就可以体验到变化；
 2. 变化需要条件触发。在被分配到实验组的用户当中，只有触发了一定条件，才能体验到AB Test的变化。
 
-![2021-06-18-abtest-not-significant-1](2021-06-18-abtest-not-significant-1.png)
+![2021-06-18-abtest-not-significant-1](\assets\2021-06-18-abtest-not-significant-1.png)
 
 对于减少方差，适用于第二种AB Test。就是在计算指标时只考虑每组符合触发条件（黄圆圈）的用户，而不是考虑每组中的所有用户（绿圆圈）
 
