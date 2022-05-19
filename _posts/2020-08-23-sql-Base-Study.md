@@ -8,6 +8,8 @@ tag: SQL
 
 关于Impala的总结~
 
+SQL运行顺序：from - where - group by ... having... - 聚合函数 - select - order by 
+
 # 1、建表逻辑
 
 ## 1.1 Impala 建表与drop表
@@ -97,14 +99,14 @@ select ... from ...;
     ```SQL
     SELECT c.CustomerId, CompanyName 
     FROM Customers c 
-    WHERE EXISTS( SELECT OrderID FROM Orders o WHERE o.CustomerID = cu.CustomerID)
+    WHERE EXISTS( SELECT OrderID FROM Orders o WHERE o.CustomerID = c.CustomerID)
     ```
 
     subquery并不会返回结果集，而是True/False（这就是为什么可以select 任何东西）；其运行方式是：
 
     1. 首先执行一次外部查询
 
-    2. 对于外部查询的每一行分别去执行一次子查询（相当于带着上述代码中c表中的一条数据 去subquery 中 根据条件 `WHERE o.CustomerID = cu.CustomerID` 去对应，如果有的话就会返回True，从而输出）
+    2. 对于外部查询的每一行分别去执行一次子查询（相当于带着上述代码中c表中的一条数据 去subquery 中 根据条件 `WHERE o.CustomerID = c.CustomerID` 去对应，如果有的话就会返回True，从而输出）
 
     3. 使用子查询的结果来确定外部查询的结果集
 
@@ -437,7 +439,7 @@ group by c1,c2;
 ```
 c1 c2 lst
 a  b  ["1","2","3"]
-c  d  ["4","5",]
+c  d  ["4","5","6"]
 ```
 
 #### 4.1.4.10 arrary_contains （Hive）
@@ -512,7 +514,7 @@ select repeat('z',5);
 #### 4.1.4.15 locate (hive)
 
 ```sql
-# locate(substr, str , loc) 返回字符串 substr 在 str 中从 pos 后查找,首次出现的位置
+# locate(substr, str , pos) 返回字符串 substr 在 str 中从 pos 后查找,首次出现的位置
 ```
 
 

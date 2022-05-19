@@ -129,7 +129,7 @@ def pdf_split(pdf_in,pdf_out,start,end):
 if __name__ == '__main__':
     pdf_in = 'BS218_10.pdf'
     pdf_out = 'BS218_10_副本2.pdf'
-    s, e = 4, 6  # 拆分的起始位置和结束位置
+    s, e = 4, 6  # 拆分的起始位置和结束位置 0表示第一页
     pdf_split(pdf_in, pdf_out, s, e) # 插入代码片
 ```
 
