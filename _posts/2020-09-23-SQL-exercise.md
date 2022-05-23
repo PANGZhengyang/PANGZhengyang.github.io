@@ -306,6 +306,46 @@ from t1
 where num !='';
 ```
 
+还有一种情况，这里主要是提醒一下用了窗口函数的计算方式：是每一行数据都会参与计算：
+
+```sql
+create table test.t0519_shop
+(
+  shop_id string,
+  commodity_id string,
+  sale int
+);
+
+insert into test.t0519_shop values
+('110','1',10),
+('110','2',20),
+('110','3',30),
+('110','4',50),
+('110','5',60),
+('110','6',20),
+('110','7',80),
+('111','1',90),
+('111','2',80),
+('111','3',50),
+('111','4',70),
+('111','5',20),
+('111','6',10);
+
+-- 求每个店铺商品销量排名的中位数
+with t as (
+    select *,
+       row_number() over (partition by shop_id order by sale) as rnd,
+       count(shop_id) over (partition by shop_id order by sale) as cnt
+from test.t0519_shop
+)
+select shop_id,avg(sale) as median
+from t
+where rnd in (floor((cnt+1)/2),ceiling((cnt+1)/2)) 
+group by shop_id;
+/* 因为每一行的cnt都是相等的，所以110 有7行，cnt都为7，参与计算的就7这个值；如果cnt不相等，就是看每一行的rnd是不是in (floor((cnt+1)/2),ceiling((cnt+1)/2))*/
+
+```
+
 
 
 # 九、计算留存率
