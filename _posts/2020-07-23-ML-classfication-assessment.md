@@ -77,7 +77,7 @@ AUC(area under ROC curve),ROC 曲线包围的面积，如果越大，模型越�
 - 逻辑回归跑出的概率，从小到大排序（逻辑回归的概率约小越好）
 - 切bins
 - 计算每个bin的TPR、FPR
-- 计算max（|TPR - FPR|)
+- 计算max [(TPR - FPR) 绝对值]
 
 确定cutoff value最有效的就是看 bad rate的趋势
 $$

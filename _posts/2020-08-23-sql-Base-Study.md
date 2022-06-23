@@ -517,7 +517,9 @@ select repeat('z',5);
 # locate(substr, str , pos) 返回字符串 substr 在 str 中从 pos 后查找,首次出现的位置
 ```
 
+#### 4.1.4.16 group_concat
 
+在impala中使用，类似于collect_list或者collect_set的功能，可以将group后的一些内容拼在一起，以字符串的形式显示
 
 
 ## 4.2 汇总函数 Aggregate Functions
@@ -552,15 +554,15 @@ Analytic functions are usually used with `OVER`, `PARTITION BY`, `ORDER BY`, and
 
   `Sum( c) over(partition by b)` 直接给出分后的结果【没有order就没有累加】
 
-### 4.3.1 `[PARTITION BY <...>] s`
+### 4.3.1 [PARTITION BY <...>] s
 
 类似于`group by`
 
-### 4.3.2 `[ORDER BY <....>]`
+### 4.3.2 [ORDER BY <....>]
 
 类似于`order by`
 
-### 4.3.3 `[<window_clause>]`
+### 4.3.3 [<window_clause>]
 
 最后function的数据范围，是current row的前多少后多少可以满足。
 

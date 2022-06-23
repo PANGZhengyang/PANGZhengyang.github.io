@@ -9,7 +9,7 @@ tag: Python
 This is my note for Python for Streamlit. When I face some tricky problems, I'll record them.
 Let's start!
 
-关于第三方插件AgGrid：可以使用[GridOptionsBuilder]([GridOptionsBuilder — streamlit-aggrid 0.2.3 documentation](https://streamlit-aggrid.readthedocs.io/en/docs/GridOptionsBuilder.html))配置表格样式：
+关于第三方插件AgGrid：可以使用[GridOptionsBuilder]([GridOptionsBuilder — streamlit-aggrid 0.2.3 documentation](https://streamlit-aggrid.readthedocs.io/en/docs/GridOptionsBuilder.html))配置表格样式：（安装包streamlit-aggrid）
 
 ```python
 from st_aggrid import AgGrid, DataReturnMode, GridUpdateMode, GridOptionsBuilder
