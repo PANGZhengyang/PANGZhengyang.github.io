@@ -109,7 +109,8 @@ Logistic regression 可以直接从`sklearn`中调取：
 
 ```python
 from sklearn.linear_model import LogisticRegression
-lg_clf = LogisticRegression()
+
+lg_clf = LogisticRegression(C=1,penalty='l2') # C为正则化强度默认为1，penalty为正则化类型，默认为L2正则
 lg_clf.fit(X, y)
 lg_clf.predict(X_test)
 lg_clf.predict_proba(X_test)
@@ -123,6 +124,12 @@ lg_clf.predict_proba(X_test)
 (1) fit(X, y) : 对给定训练数据拟定模型
 (2) predict(X) : 预测x中样本的类标签
 (3) predict_proba(X) : 给出估计概率
+
+超参数：C
+
+C值越大，对应的正则化越弱，更强调每个数据点都分类正确（可能存在过拟合）。
+
+
 
 
 

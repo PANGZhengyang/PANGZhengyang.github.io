@@ -67,16 +67,32 @@ bagging中代表算法为`Random Forest`。
 
 随机森林的“随机”主要体现在：
 
-- `bootstraping`: 随机有放回的抽样
-- 训练每棵树时，随机从M个特征中选取m个特征训练
+- `bootstraping`: 随机有放回的抽样（构造每棵决策树的数据集随机）
+- 训练每棵树时，随机从M个特征中选取m个特征训练（训练树的特征随机）
 
+### Python实现
+```python
+from sklearn.ensemble import RandomForestClassifier
+
+forest = RandomForestClassifier(n_estimators=5, random_state=2, max_features)
 ```
-优点：
-1. 不用做特征选择，在训练完后，会给出比较重要的特征
-2. 训练速度快，实现较简单，泛化能力强
-缺点：
-1.容易过拟合
-```
+
+**超参数：**
+
+1. n_estimators：构造树的个数。在算力允许的情况下，树的数量越大效果越好。
+2. random_state：由于存在随机抽样和随机选择特征，所以要是结果重现，需要固定随机数种子。
+3. max_features：决定每棵树特征的随机性。较小的max_features可以降低过拟合。好的经验是使用默认值，对于分类算法，默认max_features=sqrt(n_features)；对于回归算法，默认max_features=n_features。
+4. max_depth：每棵树最大深度。
+5. max_leaf_nodes：每棵树最大叶子节点数。
+
+### 优点
+
+1. 不用对数据进行缩放；
+2. 不用做特征选择，在训练完后，会给出比较重要的特征，计算方法是将森林中所有树的特征重要性求平均；
+3. 泛化能力比单棵树更好
+
+### 缺点
+1. 没有单棵树可视化可解释性强
 
 # boosting
 

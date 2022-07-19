@@ -59,7 +59,7 @@ $$
    f(x)= \sum_{m=1}^{M} \alpha_mG_m(x)
    $$
    
-   $f(x)$算出来是一个数不是类别，所以叫上`sign`函数转换为类别
+   $f(x)$算出来是一个数不是类别，所以加上`sign`函数转换为类别
    
    $$
    G(x)=sign[f(x)]=sign[ \sum_{m=1}^{M} \alpha_mG_m(x)]

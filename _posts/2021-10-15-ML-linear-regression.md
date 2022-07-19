@@ -150,3 +150,34 @@ $$
   $$
   
 
+## Python 实现
+
+```python
+# 一般线性回归
+from sklearn.linear_model import LinearRegression
+
+lr = LinearRegression()
+lr.fit(X_train, X_test)
+lr.predict(X_test)
+lr.score(X_test, y_test) # R-square
+lr.coef_ # 系数
+lr.intercept_ # 截距
+
+'''
+岭回归：运用L2正则化。对系数的选择不仅要在训练数据上得到好的预测结果，而且还要拟合附加约束。正则化会让系数尽可能小趋近于0，这样可以避免过拟合。
+'''
+from sklearn.linear_model import Ridge
+
+ridge = Ridge(alpha=1) # alpha默认为1，增大alpha会使得系数更加趋向于0，提高泛化
+ridge.fit(X_train, X_test)
+
+'''
+Lasso回归：运用L1正则化。使某些系数为0，将某些特征被模型完全忽略。可以看做是一种自动化的特征选择。
+'''
+from sklearn.linear_model import Lasso
+
+lasso = Lasso(alpha=1.0, max_iter=100000) # alpha默认为1，alpha越大，系数趋向于0的强度越强，降低模型复杂度
+lasso.fit(X_train, X_test)
+
+```
+

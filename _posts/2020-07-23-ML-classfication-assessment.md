@@ -9,10 +9,10 @@ katex: true
 
 ## 混淆矩阵
 
-|             |    Actual 1    |    Actual 0    |
-| :---------: | :------------: | :------------: |
-| Predicted 1 | True Positive  | False Positive |
-| Predicted 0 | False Negative | True Negative  |
+|          |  Predicted 0   |  Predicted 1   |
+| :------: | :------------: | :------------: |
+| Actual 0 | True Negative  | False Positive |
+| Actual 1 | False Negative | True Positive  |
 
 1. 准确率
    $$
@@ -38,7 +38,16 @@ katex: true
    $$
    FPR = \frac{FP}{FP+TN}
    $$
-   
+
+代码实现：
+
+```python
+from sklearn.metrics import confusion_matrix
+
+confusion = confusion_matrix(y_test, model_predict)
+# 输出一个2*2的数组，其中行对应真实值，列对应预测值
+```
+
 
 ## F1-Score
 
@@ -52,6 +61,16 @@ F1 = 2\frac{Precision*Recall}{Precision+Recall}
 $$
 `F1-Score`越大，我们选择的`cutoff value`越好。
 
+代码实现：
+
+```python
+from sklearn.metrics import f1_score
+
+f = f1_score(y_test, model_predict)
+```
+
+
+
 ## ROC
 
 在未设定`cutoff value`或任务不明确第情况下，我们可以使用`ROC`曲线评价一个分类模型效果的好坏。
@@ -62,11 +81,59 @@ ROC曲线描绘的是不同的`cutoff value`情况下，以`Recall`为纵轴，`
 
 **因此，ROC曲线越向上远离这条45°直线，说明用了这个学习器在很小的代价（负例分错为正例，横轴）下达到了相对较大的召回率（TPR）**
 
+代码实现：
+
+```python
+from sklearn.metrics import roc_curve
+
+fpr, tpr, thresholds = roc_curve(y_true, y_score, pos_label)
+'''
+主要参数：
+- y_true:真实的样本标签，默认为{0，1}或者{-1，1}。如果要设置为其它值，则 pos_label 参数要设置为特定值。例如要令样本标签为{1，2}，其中2表示正样本，则pos_label=2。
+- y_score:对每个样本的预测结果。
+- pos_label:正样本标签
+
+返回值：
+- fpr
+- tpr
+- thresholds:阈值
+'''
+plt.plot(fpr, tpr, label='ROC Curve')
+```
+
+例子：
+
+```
+>>> import numpy as np
+>>> from sklearn import metrics
+>>> y = np.array([1, 1, 2, 2])
+>>> scores = np.array([0.1, 0.4, 0.35, 0.8])
+>>> fpr, tpr, thresholds = metrics.roc_curve(y, scores, pos_label=2)
+>>> fpr
+array([0, 0.5, 0.5, 1])
+>>> tpr
+array([0.5, 0.5, 1, 1])
+>>> thresholds
+array([0.8, 0.4, 0.35, 0.1])
+```
+
+
+
 ## AUC 
 
 AUC(area under ROC curve),ROC 曲线包围的面积，如果越大，模型越好。
 
-在风控中0.65以上就比较好
+在风控中0.65以上就比较好。
+
+代码实现：
+
+```python
+from sklearn.matrics import roc_auc_score
+
+model_auc = roc_auc_score(y_test, y_score)
+```
+
+
 
 ## KS
 
