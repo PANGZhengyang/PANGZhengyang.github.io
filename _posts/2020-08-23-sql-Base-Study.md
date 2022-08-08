@@ -130,6 +130,17 @@ select ... from ...;
     ilike:区分大小写；
     rlike是正则，和regexp相同 正则相关知识请参考[正则表达式](https://blog.csdn.net/weixin_40907382/article/details/79654372)
 
+not like多个条件：
+
+```sql
+SELECT ID,name FROM nickname where name not like '%青%' or name not like '%月%' or name not like '%宝%';
+
+-- 简化写法
+SELECT ID,name FROM nickname where name not REGEXP '青|月|宝';
+```
+
+
+
 ## 3.2 Null
 
  SQL NULL（UNKNOW）是用来代表缺失值或无意义值的术语，在表中的NULL值是显示为空白字段的值，用作不知道数据的具体值，或者不知道数据是否存在，或者数据不存在等情况。
