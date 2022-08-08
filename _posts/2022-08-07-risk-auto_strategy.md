@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "自动生成策略规则"
-date: 2022-08-12
+title: "自动挖掘策略规则"
+date: 2022-08-07
 description: "自动生成策略规则"
 tag: 风控
 katex: true
