@@ -17,9 +17,30 @@ katex: true
 
 - 重复值：删除
 
-- 缺失值：删除 或者 填充（拉格朗日插值法、中值、平均数）
+- 缺失值：删除 或者 填充（拉格朗日插值法、中值、平均数）[More Detail](https://zhuanlan.zhihu.com/p/434117462)
+
+  ```python
+  # 删除
+  df.dropna() # 包含缺失值的行或列
+  
+  df['Age'].fillna(value=df['Age'].mean())
+  
+  # 拉格朗日差值法
+  df['Age'] = df['Age']。interpolate()
+  
+  ```
 
 - 离散化：例如分箱bin，能提高线性回归建模能力使其更灵活
+
+  ```python
+  # 等距切分
+  df_train.loc[:, 'fare_cut'] = pd.cut(df_train['Fare'], 20)
+  
+  # 等频切分
+  df_train.loc[:,'fare_qcut'] = pd.qcut(df_train['Fare'], 10)
+  ```
+
+  
 
 - 归一化：受异常值影响，其中range为max - min
 

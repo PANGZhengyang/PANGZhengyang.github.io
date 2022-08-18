@@ -765,12 +765,18 @@ df.groupby('Country').get_group('China')
 ```
 
 ````python
+
 ```
 groupby() 	 --> aggreate({'A':np.sum,'B':np.median}) / aggreate([np.sum, np.median])
 			--> fliter(函数)
 			--> transform(函数) 对groupby后的dataframe中的每个数据进行func运算，返回运算后的dataframe
 			--> apply(函数)
 ```
+# .agg
+# 实现分组非重复计数 nunique函数用于非重复计数
+df.groupby(['city']).agg({'num':pd.Series.nunique})
+
+
 # .transform
 # 例如在china这个组里面发现最大值，然后China这个组每一行都记录这个值
 df['transform_income'] = df.groupby('Country')['Income'].transform(np.max)

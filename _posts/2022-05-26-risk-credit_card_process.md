@@ -74,7 +74,7 @@ katex: true
 
 接下来进行单因子分析，以检查各变量的预测强度。
 
-![WoE及IV](\assets\risk\2022-05-26-risk-credit-card-process\1.png)
+![WoE及IV](\assets\risk\2022-05-26-risk-credit_card_process\1.png)
 
 这里以一个连续型变量Income来做示例，一开始根据数字大小切分较细的组别。分组的原则为：
 

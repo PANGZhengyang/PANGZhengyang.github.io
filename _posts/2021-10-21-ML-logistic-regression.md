@@ -123,7 +123,7 @@ lg_clf.predict_proba(X_test)
 常用方法：
 (1) fit(X, y) : 对给定训练数据拟定模型
 (2) predict(X) : 预测x中样本的类标签
-(3) predict_proba(X) : 给出估计概率
+(3) predict_proba(X) : 给出估计概率，二分类则得到[(px1, px2),(...)]，分别表示预测为0（负样本）的概率和预测为1（正样本）的概率，两者相加为1.
 
 超参数：C
 
