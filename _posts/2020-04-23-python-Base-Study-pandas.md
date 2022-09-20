@@ -1013,6 +1013,28 @@ df
 df.applymap(lambda x: '%.2f'%x) # dataframe
 df['某列'].map(lambda x: '%.2f'%x) # series
 ```
+# Dataframe遍历
+
+`dataframe.iterrows()`返回每一行的index，以及该行的数据
+
+`dataframe.iteritems()`返回每一列的columns名，以及该列的数据
+
+```python
+import pandas as pd
+import numpy as np
+df = pd.DataFrame(np.random.randn(10, 4), columns=list('ABCD'))
+
+for index, row in df.iterrows():
+    print(index)
+    print(row)
+    
+for columns, row in df.iteritems():
+    print(columns)
+    print(row)
+```
+
+
+
 
 # EDA
 

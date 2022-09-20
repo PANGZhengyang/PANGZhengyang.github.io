@@ -107,7 +107,7 @@ dic.popitem() # 随机删除和返回键值对 注：字典是无序可变序列
 # 获取
 dic.get(key) 
 dic[key] # 如果没有key 则会报错
-dic.items() 
+dic.items()  # 可以通过list函数转换成列表
 dic.keys()
 dic.values()
 
@@ -564,4 +564,177 @@ hashlib.sha256('test'.encode('utf-8')).digest().hex()
 - Null
 
   在Python中没有Null，NULL主要在C语言中，在Python中对应为None
+
+## 文件读写
+```python
+# 一般来说使用with as结构，这样生成一个虚拟环境，不用最后close文件
+# 现在从最基本的文件读写方法：
+
+"""几种常见模式
+1.r - read 
+2.w - write（覆盖写）
+3.a - 追加写
+4.r+ - 可读可写（覆盖写）
+5.w+ - 可读可写（覆盖写）：先写后读 - 如果使用w+ 没有写入内容，会先写空值
+6.a+ - 可读可写（追加写）
+
+read() - 一次性读取所有内容，不读取文章末尾的换行符，返回一整个内容的字符串
+readline() - 一行一行的读取文件中的内容，会读取文中末尾的换行符，返回字符串
+readlines() - 一次性读取所有内容，会读取文中末尾的换行符，返回list
+"""
+import os
+os.chdir(r'C:\Users\pangzhengyang\Desktop\jupyter\test_file')
+
+# f = open('test.txt','a+')
+# f.write('thisispart2')
+# f.seek(0)# 当你写入了后，句柄在最后，所以吧句柄归到0 可以读
+# data = f.read()
+# print(data)
+# f.close()
+
+#read
+f = open('test.txt','r')
+data = f.read()
+print(data)
+print('-------------')
+
+#readline
+f = open('test.txt','r')
+for i in range(3):
+    data = f.readline().strip()
+    print(data)
+f.close()
+print('----------------')
+
+#readlines
+f = open('test.txt','r')
+data = f.readlines()
+print(data)
+f.close()
+
+#f 可以作为一个迭代器
+f = open('test.txt','r')
+for line in f:
+    print(line.strip())
+f.close()
+
+#with 结构
+
+with open('test.txt','r') as f:
+    data = f.read()
+    print(data)
+```
+
+## 字符串join
+
+S.join（可迭代） - > str  返回一个字符串，该字符串是字符串的串联迭代。 元素之间的分隔符是S.
+
+```python
+#this function takes a string as a parameter and returns 
+def reverseWord(word):
+    #add your code here
+    a = ''.join(reversed(word))
+    return a
+#在经过reversed()的作用之后，返回的是一个把序列值经过反转之后的迭代器，
+#所以，需要通过遍历，或者List,或者next()等方法，获取作用后的值；
+```
+
+## 内置函数any()  all() 和np.any() np.all()
+
+1. 在python中 0  [] {} () False None 都是False；
+2. any(iterable) -- 只要有一个元素为True 返回True；
+3. all(iterable) -- iterable全部为Ture 返回True；
+
+```python
+any([0,1]) # Ture
+all([0,1]) # False
+```
+
+4. np.any() 和 np.array.any() 等效，这个方法只作用于array上
+
+```python
+array = np.array(list(range(5)))
+array.any() # True
+array.all() # False
+```
+
+## enumerate()
+
+```python
+#enumerate() 函数：用于将一个可迭代的数据对象(如列表、元组或字符串)组合为一个索引序列，
+#同时列出数据和数据下标，一般用在 for 循环当中。enumerate(sequence, [start=0])，其中sequence是一个可迭代序列，
+#start是一个可选参数，表示序列下标的起始位置
+lst = [1,2,3]
+for index,value in enumerate(lst):
+    print(index,value) 
+    
+#序列解包 : 就是一次将多个变量赋值给多个值
+a,b = (1,2)
+a
+```
+
+
+
+## try except else finally
+
+```python
+try: # 尝试下面的语句
+     a = b
+     print(a)
+    
+# 如果出错，会执行下面except的语句
+except:
+    print('error')
+
+# 如果成功，执行else之后的语句
+else:
+    print('true')
+    
+# finally的话是不管try之后的语句正确与否；都会执行
+try:
+    a= b
+    print(a)
+except:
+    print('error')
+finally:
+    print('the finally will be done')
+```
+
+## eval()
+
+```python
+# eval() 函数来执行一个字符串表达式，并返回表达式的值。
+eval('2+2') # 4
+```
+
+## if not x 用法
+
+在python中 None,空列表[]，空字符串""，空元组(),空字典{}，False，0 都相当于False
+
+not x 的意思相当于 if x is false, then True, else False
+
+```python
+not 0 # True
+not [] # True
+
+# x is not None的判断：
+[] is not None # True
+
+x = []
+if x is None:
+    print(1)
+else:
+    print(0) 
+# 0
+
+if not x:
+    print(1)
+else:
+    print(0)
+# 1
+
+lst = [1,2,3]
+if len(lst): # len(lst) >0 如果长度大于0，则默认为True，所以你不需要将其与0进行比较:
+    print(lst[0])
+```
 

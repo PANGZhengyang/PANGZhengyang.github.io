@@ -218,7 +218,7 @@ $$
 若$Y$与$Z$相互独立，$Y \sim \chi^2(m)$，$Z \sim \chi^2(n)$，则
 
 $$
-X = \frac {\frac Y m}{\frac Z m} \sim F(m, n) \\
+X = \frac {\frac Y m}{\frac Z n} \sim F(m, n) \\
 EX = \frac n {n - 2} \\
 DX = \frac {2 n^2(m+n-2)} {m(n-2)(n-4)}, n>4
 $$
