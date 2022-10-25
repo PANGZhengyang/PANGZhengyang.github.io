@@ -500,7 +500,7 @@ q.reverse() #反转
 ### datetime
 
 ```python
-from datetime import datetime
+from datetime import datetime,timedelta
 
 '''
 1. datetime 包括年、月、日 小时、分钟、秒 微秒
@@ -513,6 +513,10 @@ t.year t.month t.day t.hour t.minute t.second
 3. strftime - 将datetime转变为string格式
    datetime.strptime('2021-11-11','%Y-%m-%d') - 将string转变为datetime
 '''
+
+from dateutil.relativedelta import relativedelta
+datetime.now() + relativedelta(years=1)
+
 ```
 
 ### hashlib
@@ -736,5 +740,13 @@ else:
 lst = [1,2,3]
 if len(lst): # len(lst) >0 如果长度大于0，则默认为True，所以你不需要将其与0进行比较:
     print(lst[0])
+```
+
+## sum的特使用法
+
+sum()除了可以求和，还能将二维数组或者二维list拉平为一维：
+
+```python
+sum([[1,2,3],[4,5,6]],[]) # [1,2,3,4,5,6]
 ```
 

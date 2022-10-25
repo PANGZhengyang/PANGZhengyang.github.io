@@ -87,6 +87,7 @@ df.rename(columns = {'guiyang':2},inplace = True)
 
 #如果只是改index的名字的话
 df.index.name = xxx
+df.rename_axis(index={'gender':'Gender'})
 ```
 # Hierarchical Index: 多层索引
 ##  多层索引的创建
