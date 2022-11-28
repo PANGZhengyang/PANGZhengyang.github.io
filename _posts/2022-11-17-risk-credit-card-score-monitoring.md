@@ -18,9 +18,11 @@ katex: true
 PSI（Population Stability Index）群体稳定性指标，用于衡量现行样本和开发样本的分布差异，反映分数分布的稳定性。
 
 计算公式：
+
 $$
 PSI = \sum_i^n (A_i - E_i) \times ln(\frac{A_i}{E_i})
 $$
+
 其中$A_i$表示现行样本占比，$E_i$表示开发样本占比，n表示第n箱
 
 计算步骤：
@@ -49,9 +51,11 @@ $$
 CSI（Characteristic Stability Index）衡量样本在特征层面上的变化，反映特征对评分卡分数变化的影响。
 
 计算公式：
+
 $$
 CSI = \sum_i^n(A_i-E_i)Score_i
 $$
+
 其中，n表示某变量的第n个箱，$A_i - E_i$表示某特征箱子内现行样本与开发样本占比差距，$Score_i$表示第i个箱子的评分，由该变量每箱的Woe和该变量的拟合系数共同决定,[变量的分数可以看这一篇](https://pangzhengyang.github.io/2022/05/risk-credit_card_score_mapping/)
 
 计算实例：
@@ -71,9 +75,11 @@ $$
 KS（Kolmogorov-Smirnov）衡量母体鉴别能力。各评分组别中，好坏客户累计占比差距最大的数值。
 
 计算公式：
+
 $$
 KS = \max |TPR - FPR|
 $$
+
 其中TPR就表示好客户累计占比，FPR表示坏客户累计占比。
 
 图例：
@@ -95,13 +101,17 @@ Gini曲线衡量母体鉴别能力。在各评分组别中，以坏客户累计�
 AC为无判别能力，每个分组好坏客户累计占比相同；ABC为完全鉴别能力，某一评分组别以下均为坏客户，高于此评分组别的均为好客户。AGC为洛伦兹曲线（Gini曲线），越接近ABC模型鉴别能力越好。
 
 计算公式：
+
 $$
 Gini = \frac{S_{AGCA}}{S_{ABC}} = \frac{S_{ABC} - S_{ABCGA}}{S_{ABC}} = \frac{0.5 - S_{ABCGA}}{0.5} 
 $$
+
 其中ABCGA的面积可以用各评分组别的斜线面积来结算，斜线面积近似于梯形面积公式：上底为$e_{i-1}$，下底为$e_i$，高度为$f_i - f_{i-1}$，所以有：
+
 $$
 S_{ABCGA} = \sum_{i=1}^{评分组别} \frac{(e_{i-1}+e_i) \times (f_i - f_{i-1})}{2}
 $$
+
 判断标准：
 
 Gini系数大于0.4表示模型鉴别能力较好。
@@ -111,9 +121,11 @@ Gini系数大于0.4表示模型鉴别能力较好。
 IV（Information Value）衡量变量的鉴别能力。
 
 计算公式：
+
 $$
 变量IV = \sum_{i=1}^{n} (占比差距_i) \times (占比权重_i)
 $$
+
 其中，n表示变量中的每个bin，$占比差距_i$表示第i个bin中，坏客户数量占总坏客户数量（Bad Distribution) 与 Good Distribution之差；占比权重相当于Woe，表示第i个bin中，ln(Bad Distribution / Good Distribution)。
 
 判断标准：
