@@ -28,6 +28,14 @@ qq = pd.DataFrame(
 '''
 px.bar(data,x,y,title,template,color_discrete_sequence)
 1.color_discrete_sequence=plotly.colors.colorbrewer.Set1
+2.color_discrete_sequence=
+px.colors.carto：卡通片的色彩和序列
+px.colors.cmocean：CMOcean项目的色阶
+px.colors.colorbrewer：来自ColorBrewer2项目的色阶和序列
+px.colors.cyclical：周期性色标适用于具有自然周期结构的连续数据
+px.colors.diverging：分散色标适用于具有自然中点的连续数据
+px.colors.qualitative：定性色标适用于没有自然顺序的数据
+px.colors.sequential：顺序色标适用于大多数连续数据
 
 .update_traces() 更新一下trace的格式
 '''

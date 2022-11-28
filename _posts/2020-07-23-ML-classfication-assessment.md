@@ -75,7 +75,7 @@ f = f1_score(y_test, model_predict)
 
 在未设定`cutoff value`或任务不明确第情况下，我们可以使用`ROC`曲线评价一个分类模型效果的好坏。
 
-ROC曲线描绘的是不同的`cutoff value`情况下，以`Recall`为纵轴，`1-specificity`为横轴，描述随着`cutoff value`变小，`Recall` 和 `1-specificity` 的变化。在计算上，选取不同的`cutoff value`可以得到`TPR、FPR`，从而做ROC图。
+ROC曲线描绘的是不同的`cutoff value`情况下，以`TPR`为纵轴，`FPR`为横轴，描述随着`cutoff value`变小，`TPR` 和 `FPR` 的变化。在计算上，选取不同的`cutoff value`可以得到`TPR、FPR`，从而做ROC图。
 
 如果是随机分类，没有进行任何学习器，FPR=TPR，即正例分对和负例分错概率相同，预测出来的正例负例和正例负例本身的分布是一致的，所以是一条45°的直线。
 
@@ -103,21 +103,38 @@ plt.plot(fpr, tpr, label='ROC Curve')
 
 例子：
 
-```
->>> import numpy as np
->>> from sklearn import metrics
->>> y = np.array([1, 1, 2, 2])
->>> scores = np.array([0.1, 0.4, 0.35, 0.8])
->>> fpr, tpr, thresholds = metrics.roc_curve(y, scores, pos_label=2)
->>> fpr
-array([0, 0.5, 0.5, 1])
->>> tpr
-array([0.5, 0.5, 1, 1])
->>> thresholds
-array([0.8, 0.4, 0.35, 0.1])
+```python
+import numpy as np
+from sklearn import metrics
+
+y = np.array([0, 0, 1, 1]) # 真实值
+scores = np.array([0.1, 0.4, 0.35, 0.8]) # 预测概率
+fpr, tpr, thresholds = metrics.roc_curve(y, scores, pos_label=1) # 1 为positive
+
+fpr
+# array([0, 0.5, 0.5, 1])
+tpr
+# array([0.5, 0.5, 1, 1])
+thresholds
+# array([0.8, 0.4, 0.35, 0.1])
 ```
 
+对上述过程进行解释，首先会选取预测概率中最大的值作为cut-off value，如果预测概率大于等于cut-off value，则预测为positive。所以第一个会选取0.8作为thresholds。
 
+根据混淆矩阵：
+
+|      |   P0   |   P1   |
+| :--: | :----: | :----: |
+|  A0  | TN = 2 | FP = 0 |
+|  A1  | FN = 1 | TP = 1 |
+
+所以：
+
+TPR = TP / (TP+FN) = 0.5
+
+FPR = FP / (FP+TN) = 0
+
+然后thresholds = 0.8，得到一组TPR 和FPR，以此内推，当thresholds=0.4时，能够在得到一组，画图即可。
 
 ## AUC 
 
@@ -138,6 +155,10 @@ model_auc = roc_auc_score(y_test, y_score)
 ## KS
 
 广泛用于风控领域，表示模型将正负样本区分开的能力。值越大，表示模型计算出的预测值对好坏用户进行区分的能力越强。一般来说，KS>0.2即可认为模型具有较好的预测准确性；如果超过0.5需要注意，是不是过拟合了。
+
+类比于ROC曲线：
+
+KS的横轴是不同阈值（thresholds），纵轴是TPR 和 FPR，KS值为max [abs(TPR - FPR)]
 
 计算方法：（good = 0， bad = 1）
 
@@ -189,12 +210,14 @@ $$
 
 ## Lift曲线
 
-提升度（Lift）衡量 模型/规则 对目标“响应”的预测能力 由于随机选择多少倍。Lift大于1，表示模型/规则比随机捕捉了更多的“响应”。
+提升度（Lift）衡量 模型/规则 对目标“响应”的预测能力 高于随机选择多少倍。Lift大于1，表示模型/规则比随机捕捉了更多的“响应”。
 
 计算公式：
+
 $$
 Lift = \frac{TP / (TP+FP)}{(TP+FN)/(TP+FP+TN+FN)}
 $$
+
 Lift指标可以这样理解：在不使用模型或者策略的情况下，我们用先验概率估计正例的比例，即上式分母部分；利用模型后，我们不需要从整个样本中来挑选正例，只需要从我们预测为正例的样本中挑选正例。
 
 | Decile | Obs  | Bad  | Bad(%) Captured by model | Bad(%) Captured by randomly | Cumulative Bad(%) by model | Cumulative Bad(%) randomly | Lift |

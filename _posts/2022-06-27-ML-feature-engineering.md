@@ -17,7 +17,7 @@ katex: true
 
 - 重复值：删除
 
-- 缺失值：删除 或者 填充（拉格朗日插值法、中值、平均数）[More Detail](https://zhuanlan.zhihu.com/p/434117462)
+- 缺失值：删除 或者 填充（随机森林模型填充、拉格朗日插值法、中值、平均数）[More Detail](https://zhuanlan.zhihu.com/p/434117462)
 
   ```python
   # 删除
@@ -28,6 +28,29 @@ katex: true
   # 拉格朗日差值法
   df['Age'] = df['Age']。interpolate()
   
+  ```
+
+  **用随机森林处理缺失值**
+
+  原理：以含有缺失值的特征作为目标变量，其他所有或者部分非缺失特征作为自变量，去训练模型，然后通过模型去预测目标变量。
+
+  举例：现有特征X1-X5，其中X4(连续性)和X5(离散型)为缺失变量，现用X5的非缺失特征作为训练集Target，X1-X3作为训练变量去构建模型，然后去预测X5的缺失值。
+
+  ```python
+  from sklearn.ensemble import RandomForestClassifier # X5为离散型
+  from sklearn.ensemble import RandomForestRegression # X4为连续型
+  
+  data_X = df.loc[:,['X1','X2','X3']]
+  data_Y = df.loc[:,'X5']
+  
+  train_X = data_X.loc[df['X5'].notnull()]
+  train_Y = data_Y.loc[df['X5'].notnull()]
+  pred_X = data_X.loc[df['X5'].isnull()]
+  
+  rfc=RandomForestClassifier(n_estimators=100,max_depth=3,random_state=1)
+  rfc.fit(train_X, train_Y)
+  pred_Y = rfc.predict(pred_X).round()
+  df.loc[df['X5'].isnull(),'X5']=pred_Y
   ```
 
 - 离散化：例如分箱bin，能提高线性回归建模能力使其更灵活
