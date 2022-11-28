@@ -55,4 +55,4 @@ katex: true
 
 3. 决策树自动挖掘策略
 
-   [详细内容见自动挖掘策略]规则(https://pangzhengyang.github.io/2022/08/risk-auto_strategy/)
+   [详细内容见自动挖掘策略规则](https://pangzhengyang.github.io/2022/08/risk-auto_strategy/)
