@@ -82,5 +82,12 @@ result = pyfiglet.figlet_format("Python", font="larry3d")
 print(result)
 ```
 
+## Quarto
 
+这个不是一个包，是一个展示工具，与jupyter lab配合，可将代码、markdown、图片生成html用于展示：
 
+[点击官网](https://quarto.org/docs/get-started/hello/jupyter.html)
+
+先下载安装Quarto，打开jupyter lab可以使用terminal来写quarto语句生成html。
+
+如果打不开terminal可以[点击该篇文章](https://blog.csdn.net/qq_39567427/article/details/113520095)
