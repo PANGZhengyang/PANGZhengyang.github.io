@@ -122,6 +122,11 @@ select ... from ...;
     
     
     
+    ### 2.2.3 join时条件写在on和where的区别
+    
+    对于inner join，on 和 where是一致了；但是对于left join，单独对主表的限制写在where生效，写在on不生效。
+    
+    ![ join时条件写在on和where的区别](/assets/sql/2020-08-23-sql-Base-Study/1.png)
 
 # 3.运算符与关键字
 

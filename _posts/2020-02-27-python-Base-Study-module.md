@@ -91,3 +91,37 @@ print(result)
 先下载安装Quarto，打开jupyter lab可以使用terminal来写quarto语句生成html。
 
 如果打不开terminal可以[点击该篇文章](https://blog.csdn.net/qq_39567427/article/details/113520095)
+
+## pysnooper
+
+将代码每一步打印出来，做Debug。
+
+```python
+# 装饰器写法：
+@pysnooper.snoop()
+def foo():
+    a= []
+    for i in list(range(3)):
+        a.append(i+1)
+    return a
+foo()
+
+# 上下文写法：
+a = []
+with pysnooper.snoop():
+    for i in list(range(3)):
+        a.append(i+1)
+    
+```
+
+## langid
+
+可以识别文字是什么语言
+
+```python
+import langid
+s1 = '你好世界，好好学习啊'
+langid.classfy(s1)
+```
+
+返回两个字母的ISO：[请参考这篇](https://baike.baidu.com/item/ISO%20639-1)
