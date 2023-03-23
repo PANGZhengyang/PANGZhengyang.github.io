@@ -251,6 +251,22 @@ select distinct id
 from t,t1
 where cnt = max_cnt;
 ```
+用窗口函数：
+```sql
+with t as(
+    select id,count(id) cnt
+    from test.pzy_aaa
+    group by 1
+
+)
+select id
+from(
+    select * ,dense_rank() over(order by cnt desc) rnd
+    from t
+    ) a
+where rnd=1
+```
+
 
 # 八、求中位数
 

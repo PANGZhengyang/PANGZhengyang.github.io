@@ -211,6 +211,16 @@ from ttengine_hour_data where …
 select from_unixtime(unix_timestamp('2021-08-09')+3600*24,'yyyy-MM-dd'); --8月9日加一天
 ```
 
+**to_unix_timestamp() hive**
+将非正常格式的日期字符串转换成日期格式(yyyy-MM-dd hh:mm:ss)
+
+```sql
+select from_unixtime(to_unix_timestamp('20230220133030','yyyyMMddHHmmss'),'yyyy-MM-dd HH:mm:ss')
+```
+
+
+
+
 #### 4.1.2.3 add_?*
 
 1. `add_months` :返回的是timestamp 可以试用`to_date()` 转换 

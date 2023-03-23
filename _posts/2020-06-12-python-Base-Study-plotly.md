@@ -40,10 +40,20 @@ px.colors.sequential：顺序色标适用于大多数连续数据
 .update_traces() 更新一下trace的格式
 '''
 
-fig = px.bar(qq, x="Category", y=["Predicted", "real", "new_val"], title="Long-Form Input",template="plotly_dark",color_discrete_sequence=['#A21C1C'])
+fig = px.bar(qq, x="Category", y=["Predicted", "real", "new_val"], title="Long-Form Input",template="plotly_dark",color_discrete_sequence=['#A21C1C'],width=600, height=400)
 
-# 在bar图里面再加入line图，同事yaxis='y2'和.update_layout添加second——axis
+# 在bar图里面再加入line图，同时yaxis='y2'和.update_layout添加second axis
 fig.add_traces( px.line(qq, x="Category", y="real",markers=True,color_discrete_sequence=['blue']).update_traces(showlegend=True, name="real", yaxis="y2").data)
 
+# 修改第二根y轴的位置
 fig.update_layout(yaxis2={"side":"right", "overlaying":"y"})
+
+# 修改title的位置
+fig.update_layout( title={
+        'y':0.8,   # 位置，坐标轴的长度看做1
+        'x':0.5,
+        'xanchor': 'center',   # 相对位置
+        'yanchor': 'top'})
+
+
 ```
