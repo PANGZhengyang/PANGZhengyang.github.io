@@ -806,6 +806,10 @@ rank(ascending=True, method= )
 'dense' = dense_rank 1,2,2,3
 'min' = rank 1,2,2,4
 '''
+
+# pandas 实现 sum(dealamount) over(partition by card_lid order by requesttime)
+df3 = df3.sort_values(by=['card_lid','requesttime'],ascending=[True,True])
+df3['amount_cumsum'] = df3.groupby('card_lid')['dealamount'].cumsum()
 ````
 
 # 排序

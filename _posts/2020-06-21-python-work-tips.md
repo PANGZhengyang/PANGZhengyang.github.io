@@ -33,17 +33,17 @@ import os
 import pandas as pd
 import xlwings as xw
 
-file_name = '文件路径'
+path = r'xxx.xlsx'
 app=xw.App(visible=False,add_book=False)
 wb = app.books.open(path)
-
 df_list = []
-for i in range(1,len(wb.sheets)+1):
-    df_list.append(pd.read_excel(path,sheet_name=f'Sheet{i}'))
+for i in range(0,len(wb.sheets)):
+    df_list.append(pd.read_excel(path,sheet_name=wb.sheets[i].name))
 df = pd.concat(df_list,ignore_index=True)
 
 app.quit()
-df.to_excel('路径')
+df.to_excel(r'xxx合并后excel.xlsx')
+print('finish')
 ```
 
 3. 多个Excel有多个Sheet，合并到一个Excel里面

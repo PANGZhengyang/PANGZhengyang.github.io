@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Python Base Study——Fundamention"
+title: "Python Base Study——Fundamentals"
 date: 2020-02-01
 description: "Python学习笔记"
 tag: Python
