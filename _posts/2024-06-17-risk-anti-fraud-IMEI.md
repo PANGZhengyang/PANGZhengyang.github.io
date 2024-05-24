@@ -90,7 +90,7 @@ IMEI（International Mobile Equipment Identity）是国际移动设备识别码�
   
 - **UUID**
   
-  UUID（Universally Unique Identifier）是国际标准化组织（ISO）提出了一个概念。它是一个32位的十六进制序列。在应用程序使用生命期间，这个 UUID保持不变。但如果用户重新安装，那么这个 UUID 就会发生变化。 **app之内信息共享**
+  UUID（Universally Unique Identifier）是国际标准化组织（ISO）提出了一个概念。它是一个32位的十六进制序列。在应用程序使用生命期间，这个 UUID保持不变。但如果用户重新安装，那么这个 UUID 就会发生变化。 **app之内信息共享**。
   
   
   

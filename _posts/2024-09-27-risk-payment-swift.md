@@ -13,9 +13,11 @@ SWIFT全称是环球银行金融电信协会（Society for Worldwide Interbank F
 
 注意：**本身SWIFT只是金融机构间的一个通讯工具**，**并不参与清算和资金转移的过程**，简单来说就是传递信息流；而资金流的划拨则有代理行、中转行、当地清算机构等来完成，比如：人民银行大额支付系统、中国CIPS、美国CHIPS。
 
-理论上所有的跨境支付都需要经过SWIFT。
+理论上所有的跨境转账都需要经过SWIFT。
 
 **场景1：汇出行和收款行在同一国家，银行间有合作关系，货币无需转换。**
+
+**报文类型有哪些？**实际上MT类型有**几种业务场景**：Customer Transfer（客户汇款，MT1XX类型）、Financial Institution Transfers（银行头寸调拨，MT2XX类型）、Foreign Exchange（外汇买卖，MT3XX类型）、Collections+Cash Letters（托收，MT4XX类型）、Securities证券、Precious Metals and Syndication（贵金属和银团贷款）、Documentary Credits and Guarantees（跟单信用证和担保，MT7XX）、Traveler’s Cheque（旅行支票）、Bank Statement（银行对账，MT9XX类型）。
 
 ![场景1](\assets\risk\2024-09-27-risk-payment-swift\1.png)
 
@@ -37,5 +39,7 @@ SWIFT全称是环球银行金融电信协会（Society for Worldwide Interbank F
 
 人民币跨境支付系统（Cross-border Interbank Payment System，简称CIPS）是中国人民银行专门为跨境人民币支付业务开发的资金清算结算系统。它旨在向境内外参与者的跨境人民币业务提供资金清算、结算服务，为人民币国际化铺设“高速公路”。CIPS主要处理人民币与其他货币之间的转账和支付事务，其功能更专注于跨境支付和清算。
 
+CIPS负责人民币（在岸离岸转换）在岸转离岸人民币的信息流还是会走Swift
 
+中银的CNY转到中银香港的CNH 资金流和信息流
 
