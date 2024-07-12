@@ -19,7 +19,7 @@ IMEI（International Mobile Equipment Identity）是国际移动设备识别码�
 
 - **IMEI**
 
-  GSM设备返回，是联通、移动手机的标识。
+  GSM设备返回，是联通、移动手机的标识
 
   **APP重装不会改变IMEI**
 
