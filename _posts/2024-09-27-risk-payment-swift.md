@@ -41,5 +41,5 @@ SWIFT全称是环球银行金融电信协会（Society for Worldwide Interbank F
 
 CIPS负责人民币（在岸离岸转换）在岸转离岸人民币的信息流还是会走Swift
 
-中银的CNY转到中银香港的CNH 资金流和信息流
+
 
