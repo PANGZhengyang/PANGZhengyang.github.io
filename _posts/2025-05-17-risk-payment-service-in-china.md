@@ -13,9 +13,64 @@ katex: true
 
 # 移动支付
 
+**外卡内绑：**支付宝/微信支付 + 外卡、云闪付 + 银联外卡 ；
 
+**外包内用：**境外钱包 + 外卡；
 
+## 支付宝/微信支付+外卡
 
+### 绑卡流程
 
-![Token使用](\assets\reading minutes\2025-04-15-risk-payment-token\1.png)
+![支付宝/微信支付+外卡-绑卡流程](\assets\reading minutes\2025-05-17-risk-payment-service-in-china\1.png)
 
+**说明：**
+
+1、外卡收单：主要负责交易的换汇及跨境人民币申报等工作；支付宝微信帮外卡的外卡收单是中行或工行；
+
+### 支付流程
+
+![支付宝/微信支付+外卡-支付流程](\assets\reading minutes\2025-05-17-risk-payment-service-in-china\2.png)
+
+**说明：**
+
+1、境内收单：微信对应财付通，支付宝对应蚂蚁金服；
+
+## 云闪付+银联外卡
+
+### 绑卡流程
+
+![云闪付+银联外卡-绑卡流程](\assets\reading minutes\2025-05-17-risk-payment-service-in-china\3.png)
+
+**说明：**
+
+1、云闪付只支持银联外卡
+
+### 支付流程
+
+![云闪付+银联外卡-支付流程](\assets\reading minutes\2025-05-17-risk-payment-service-in-china\4.png)
+
+**说明：**
+
+1、该场景下，大家应该也发现了一个特殊的地方，这里并没有出现收单机构的角色，按照大家的印象，银联作为卡组，按理说应当是“四方模式”，而四方里面应当有收单机构的存在，但稍微深入思索，估计主要原因大家应该都懂，银联是央行下属机构，并不是第三方支付公司，银联这里可以认为扮演了**收单、转接清算和卡组**三重角色。
+
+## 境外钱包+外卡
+
+根据是否留存资金又可以把这两类钱包分为穿透式数字钱包（Passthrough Wallet）和滞留式数字钱包（Staged Wallet）：
+
+**穿透式数字钱包**：Apple Pay、Google Pay，不做资金沉淀
+
+**滞留式数字钱包**：Paypal、Alipay、Wechat Pay，有资金沉淀
+
+### 绑卡流程
+
+以穿透式数字钱包绑卡-银联合作 为例：
+
+![境外钱包+外卡-绑卡流程](\assets\reading minutes\2025-05-17-risk-payment-service-in-china\5.png)
+
+### 支付流程
+
+![境外钱包+外卡-支付流程](\assets\reading minutes\2025-05-17-risk-payment-service-in-china\6.png)
+
+说明：
+
+1、流程图上的银联其实可以拆分成为中国银联和银联国际两个主体，中国银联负责境内侧转接，拓展受理侧业务，如境内收单会员的管理，而银联国际负责境外侧转接，发卡银行是银联国际的会员，根据银联国际的业务规则进行对个人客户的发卡及管理。
