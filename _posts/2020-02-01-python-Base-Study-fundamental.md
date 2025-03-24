@@ -362,7 +362,7 @@ from functools import wraps
 
 def decorator(func):
     
-    @warps(func) #改变地址
+    @wraps(func) #改变地址
     def wrapper(*args,**kwargs):
         ...
         func(*args,**kwrags)

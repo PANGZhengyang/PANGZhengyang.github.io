@@ -23,7 +23,7 @@ np.array([1, 2, 3])
 np.zeros() # 全0
 np.ones() # 全1
 np.full((2,2),3) # 全部填充3
-np.eye((2,2)) # 对角线为1
+np.eye(2) # 对角线为1
 np.linspace(0,1,5) # 创建一个5个元素的数组，把5个数均匀分配到0~1
 np.random.randint(1,10,(2,2)) # 2×2的[1,10)
 np.random.normal(loc, scale, size) # 正态分布，默认标准正态分布
