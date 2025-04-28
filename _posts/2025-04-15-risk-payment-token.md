@@ -9,7 +9,7 @@ katex: true
 
 # Token Payment
 
-Token：加密后的银行卡号（PAN，Primary Account Number）
+Token：加密后的银行卡号（PAN，Primary Account Number） 
 
 Token要素
 
