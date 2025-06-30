@@ -26,5 +26,5 @@ katex: true
 
 通用分析模型图：
 
-![通用分析模型图](\assets\reading minutes\2025-01-26-risk-payment-info-cash-flow\1.png)
+![通用分析模型图](\assets\risk\2025-01-26-risk-payment-info-cash-flow\1.png)
 

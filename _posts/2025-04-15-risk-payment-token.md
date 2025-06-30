@@ -62,5 +62,5 @@ Payment System：支付交易系统，这里通常包括收单机构、卡组织
 
 （3）发卡行进行支付信息校验（ID&V），校验成功，原路返回授权结果，并最终通知持卡人支付成功。
 
-![Token使用](\assets\reading minutes\2025-04-15-risk-payment-token\1.png)
+![Token使用](\assets\risk\2025-04-15-risk-payment-token\1.png)
 
