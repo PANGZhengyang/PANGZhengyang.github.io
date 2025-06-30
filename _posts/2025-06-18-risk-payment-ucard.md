@@ -23,5 +23,5 @@ U卡使用流程：
 
 4、交易所将加密货币转换成法定货币与银行完成资金结算
 
-![U卡使用流程](\assets\reading minutes\2025-06-18-risk-payment-ucard\1.png)
+![U卡使用流程](\assets\risk\2025-06-18-risk-payment-ucard\1.png)
 

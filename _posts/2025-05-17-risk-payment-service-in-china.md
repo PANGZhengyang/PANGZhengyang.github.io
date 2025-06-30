@@ -21,7 +21,7 @@ katex: true
 
 ### 绑卡流程
 
-![支付宝/微信支付+外卡-绑卡流程](\assets\reading minutes\2025-05-17-risk-payment-service-in-china\1.png)
+![支付宝/微信支付+外卡-绑卡流程](\assets\risk\2025-05-17-risk-payment-service-in-china\1.png)
 
 **说明：**
 
@@ -29,7 +29,7 @@ katex: true
 
 ### 支付流程
 
-![支付宝/微信支付+外卡-支付流程](\assets\reading minutes\2025-05-17-risk-payment-service-in-china\2.png)
+![支付宝/微信支付+外卡-支付流程](\assets\risk\2025-05-17-risk-payment-service-in-china\2.png)
 
 **说明：**
 
@@ -39,7 +39,7 @@ katex: true
 
 ### 绑卡流程
 
-![云闪付+银联外卡-绑卡流程](\assets\reading minutes\2025-05-17-risk-payment-service-in-china\3.png)
+![云闪付+银联外卡-绑卡流程](\assets\risk\2025-05-17-risk-payment-service-in-china\3.png)
 
 **说明：**
 
@@ -47,7 +47,7 @@ katex: true
 
 ### 支付流程
 
-![云闪付+银联外卡-支付流程](\assets\reading minutes\2025-05-17-risk-payment-service-in-china\4.png)
+![云闪付+银联外卡-支付流程](\assets\risk\2025-05-17-risk-payment-service-in-china\4.png)
 
 **说明：**
 
@@ -65,11 +65,11 @@ katex: true
 
 以穿透式数字钱包绑卡-银联合作 为例：
 
-![境外钱包+外卡-绑卡流程](\assets\reading minutes\2025-05-17-risk-payment-service-in-china\5.png)
+![境外钱包+外卡-绑卡流程](\assets\risk\2025-05-17-risk-payment-service-in-china\5.png)
 
 ### 支付流程
 
-![境外钱包+外卡-支付流程](\assets\reading minutes\2025-05-17-risk-payment-service-in-china\6.png)
+![境外钱包+外卡-支付流程](\assets\risk\2025-05-17-risk-payment-service-in-china\6.png)
 
 说明：
 
