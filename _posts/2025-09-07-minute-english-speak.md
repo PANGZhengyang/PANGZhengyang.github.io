@@ -21,13 +21,34 @@ katex: true
 # 心情和感受
 
 - make me feel  **energetic** / calm / relaxed / **motivated** / upset 
-
 - quiet and peaceful
-
 - is a good way to relax / unwind  / reduce stress
-
 - can give them a sense of achievement
-
 - can bring back good memories
 
-  
+
+# 健康
+
+- improve / damage my health / memory / coordination skills 
+
+- have a healthy / active /  lifestyle
+
+- have a balanced / healthy diet
+- are rich in vitamin C
+- contains too much fat and sugar
+- increase the risk of heart disease and high blood pressure 
+- cause health problem 
+- do outdoor activities
+- enjoy the sun and fresh air / natural beauty
+- get closer to nature
+- 
+
+
+
+
+
+refill the water 加水
+
+what souvenir do you recommend?
+
+best-selling items 
