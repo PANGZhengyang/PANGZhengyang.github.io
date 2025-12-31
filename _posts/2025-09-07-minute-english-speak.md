@@ -52,3 +52,26 @@ refill the water 加水
 what souvenir do you recommend?
 
 best-selling items 
+
+# 按摩
+
+male/female therapist
+
+My back is stiff./My shoulders are so tight. Please spend more time on my shoulders and neck.
+
+力度刚好：It is fine.
+
+力度太大: It is too heavy. softer pls.
+
+力度太轻：I like more deeper pressure. harder pls
+
+Do you have any therapist available right now?
+
+Can i deposite my luggage here? I'll come back at 5 o'clock pm.
+
+# 砍价
+
+That’s a little overpriced. 有点贵了。
+
+could you make it a little cheaper? / Could you give me a discount? / How about 50?
+
