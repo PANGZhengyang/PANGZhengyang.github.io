@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "投资策略"
-date: 2025-12-25
+date: 2026-01-25
 description: "记录投资的一些要点"
 tag: 投资
 katex: true

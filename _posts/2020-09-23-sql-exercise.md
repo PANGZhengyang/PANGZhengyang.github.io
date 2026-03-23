@@ -21,15 +21,15 @@ Dense_rank()over (partition by... order by ...) ---1,2,2,3
 
 # 三、各种查询方式：
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/1260a66bf7614b45b9b7c4dac81a5ef9.jpg?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAeW91bmd5YW5ncGFuZw==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center)
+![1](/assets/sql/2020-09-23-sql-exercise/1.png)
 
 # 四、union连接
 
 t1是购买商品的表；t2是收藏商品的表
 uid-用户id； cid-商品id
-![在这里插入图片描述](https://img-blog.csdnimg.cn/779fae13e30d4bc087a80d4197bdf802.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAeW91bmd5YW5ncGFuZw==,size_20,color_FFFFFF,t_70,g_se,x_16)
+![2](/assets/sql/2020-09-23-sql-exercise/2.png)
 将上述表变为下面的形式：
-![在这里插入图片描述](https://img-blog.csdnimg.cn/6ffd97aaa8814c6cb1d0a92f9c25fcf5.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAeW91bmd5YW5ncGFuZw==,size_20,color_FFFFFF,t_70,g_se,x_16)
+![3](/assets/sql/2020-09-23-sql-exercise/3.png)
 
 ```sql
 select  t1.uid,
@@ -64,9 +64,9 @@ n - 往上取多少条
 default - 如果往上取没有的话用什么填充
 lag(createtime,1,null) over(partition by cookieid order by createtime) as dt
 相当于第二列要取它上面一列的
-![在这里插入图片描述](https://img-blog.csdnimg.cn/40e545cf0cd74aaaad37907d1ddd43e1.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAeW91bmd5YW5ncGFuZw==,size_12,color_FFFFFF,t_70,g_se,x_16)
+![4](/assets/sql/2020-09-23-sql-exercise/4.png)
 例1：pay表记录每天的营业额(amount)，现在要取比前两天营业额都多的日期(dt)：
-![在这里插入图片描述](https://img-blog.csdnimg.cn/f0c8c20724e94c17b918a145a2eb1256.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAeW91bmd5YW5ncGFuZw==,size_20,color_FFFFFF,t_70,g_se,x_16)
+![5](/assets/sql/2020-09-23-sql-exercise/5.png)
 
 ```sql
 with t as (
@@ -98,7 +98,7 @@ lead(ts,1) over(partition by user_id order by ts) - ts
 
 ## 6.1相邻两行交换
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/cfb0f7fd0f7e40d48716e43fa539f1c3.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAeW91bmd5YW5ncGFuZw==,size_20,color_FFFFFF,t_70,g_se,x_16)
+![6](/assets/sql/2020-09-23-sql-exercise/6.png)
 
 ```sql
 with t as (
@@ -113,7 +113,7 @@ from seat,t
 
 ## 6.2 行列互换
 
-![在这里插入图片描述](https://img-blog.csdnimg.cn/6bc749f91aeb4a819f1b957b83c3666a.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAeW91bmd5YW5ncGFuZw==,size_20,color_FFFFFF,t_70,g_se,x_16)
+![7](/assets/sql/2020-09-23-sql-exercise/7.png)
 
 ```sql
 select year,
@@ -374,7 +374,7 @@ group by shop_id;
 现在该手机厂商想要分析手机中的应用（**相机**）的活跃情况，需统计次留、三留、七留
 要用到的字段：用户id-uid、应用名称-app、登陆时间-dt
 表是login
-![在这里插入图片描述](https://img-blog.csdnimg.cn/e6b73ac70eb741efa15ecb160d44d41a.png?x-oss-process=image/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBAeW91bmd5YW5ncGFuZw==,size_20,color_FFFFFF,t_70,g_se,x_16)
+![8](/assets/sql/2020-09-23-sql-exercise/8.png)
 
 ```sql
 with t as (
@@ -560,7 +560,7 @@ from t1;
 
 有如下两张表：
 
-![2020-09-23-SQL-exercise](/assets/2020-09-23-SQL-exercise-1.png)
+![9](/assets/sql/2020-09-23-sql-exercise/9.png)
 
 ```sql
 -- 用车方和司机被禁止(banned=1)的比率分别为？
