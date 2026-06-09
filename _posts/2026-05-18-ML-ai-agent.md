@@ -17,13 +17,20 @@ katex: true
 
 thought - action - observation - final answer
 
-![React](\assets\machine learning\2026-06-07-ML-ai-agent\1.png)
+![React](\assets\machine learning\ML-ai-agent\1.png)
 
 ReAct时序图：
 
-![React时序图](\assets\machine learning\2026-06-07-ML-ai-agent\2.png)
+![React时序图](\assets\machine learning\ML-ai-agent\2.png)
 
 ## Plan-and-Execute
 
 先规划再执行（Claude code、manus）
 
+时序图：
+
+![React时序图](\assets\machine learning\ML-ai-agent\2.png)
+
+Plan模型和Re-plan模型可以是一个；
+
+这种模式属于是内部在嵌套一个Agent（可能是ReAct执行方式）

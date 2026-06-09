@@ -62,7 +62,9 @@ Transformer主要能够理解一段话中哪些信息更重要，以及并行处
 
 
 
+# KV缓存
 
+KV Cache=把历史token的Key/Value保存下来,以便解码马阶段复用,避免重复计算。
 
 
 
